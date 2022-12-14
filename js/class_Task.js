@@ -23,7 +23,7 @@ class Task {
         this.plan_or_task = plan_or_task;
         this.finished = finished;
         this.duplicate = duplicate;
-        this.deadline = deadline.getTime();
+        this.deadline = deadline;
         this.required_time = required_time*3600000;
         this.days = days;
         this.auto_scheduled = auto_scheduled;
