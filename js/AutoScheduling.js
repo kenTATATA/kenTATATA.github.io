@@ -124,23 +124,6 @@ class Schedule {
         }
     }
 
-    // 時系列タスクの表示をするモジュール
-    viewTasks() {
-        document.getElementById('container').innerHTML = '';
-
-        for (const events of this.all_tasks) {
-            const added_task = document.createElement('added_task');
-            added_task.innerHTML = `
-                <div class="task__container">
-                    <h3>${events.name}</h3>
-                    <p>${new Date(events.specified_time[0][0]).toString()} -> ${(new Date(events.specified_time[0][1])).toString()}</p>
-                    <hr>
-                </div>
-            `;
-            document.getElementById('container').appendChild(added_task);
-        }
-    }
-
     // all_tasksに全てのtaskを追加するモジュール (ここで, 分割した場合は統合する？) 
     returnAllTasks() {
         var i = 0;
@@ -165,6 +148,30 @@ class Schedule {
             }
         }
         return this.all_tasks;
+    }
+
+    // 時系列タスクの表示をするモジュール
+    viewTasks() {
+
+        this.returnAllTasks();
+        for (const event of this.all_tasks) {
+            var added_task = document.createElement('added_task');
+            added_task.innerHTML = `
+            <div class="task__container">
+            <h3>${event.name}</h3>
+            <p>${new Date(event.specified_time[0][0]).toString()} -> ${(new Date(event.specified_time[0][1])).toString()}</p>
+            <hr>
+        </div>
+            `;
+            document.getElementById('container').appendChild(added_task);
+        }
+
+        // for (const events of this.auto_schedule) {
+        //     console.log(events.name + ":" + (new Date(events.specified_time[0][0])).toString() + " -> " + (new Date(events.specified_time[0][1])).toString());
+        // }
+        // for (const events of this.on_time) {
+        //     console.log(events.name + ":" + (new Date(events.specified_time[0][0])).toString() + " -> " + (new Date(events.specified_time[0][1])).toString());
+        // }
     }
 }
 
