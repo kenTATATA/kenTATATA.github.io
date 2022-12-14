@@ -164,8 +164,8 @@ class Schedule {
     // 時系列タスクの表示をするモジュール
     viewTasks() {
 
-        this.returnAllTasks();
-        for (const event of this.all_tasks) {
+        all_tasks = this.returnAllTasks();
+        for (const event of all_tasks) {
             var added_task = document.createElement('added_task');
             added_task.innerHTML = `
             <div class="task__container">
