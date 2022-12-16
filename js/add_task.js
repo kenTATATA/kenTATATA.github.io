@@ -2,18 +2,17 @@ var btn = document.getElementById('submit__btn');
 
 //追加ボタンが押されたときの処理
 btn.addEventListener('click', function () {
-    //新しいタスクのデータをフォームから取得
+    //新しいタスクのデータをフォームから取得し、Taskクラスの変換してScheduleクラスに格納
     var new_task = get_new_task();
 
 
-    //データベースからタスクを取得
+    //データベースから他のタスクを取得し、Taskクラスの変換してScheduleクラスに格納
 
 
-    //classを揃える
     //自動スケジューリング
 
 
-    //データベースにタスクを格納
+    //Scheduleクラスのall_tasksのタスクをデータベースに格納
 
 
     //トップページに戻る
