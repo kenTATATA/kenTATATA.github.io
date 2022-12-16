@@ -5,7 +5,7 @@ class Task {
      * @param {String} overview :メモ
      * @param {String} category :カテゴリー
      * @param {Boolean} favorite :お気に入り
-     * @param {Number} plan_or_task :予定かタスクか
+     * @param {String} plan_or_task :Plan,Task
      * @param {Boolean} finished :終了済みか
      * @param {Boolean} duplicate :重複を許すか
      * @param {Date} deadline :Taskの締め切り時間
@@ -24,7 +24,7 @@ class Task {
         this.finished = finished;
         this.duplicate = duplicate;
         this.deadline = deadline;
-        this.required_time = required_time*3600000;
+        this.required_time = required_time*3600000; //required_timeの入力がnullのとき0になるけど大丈夫？
         this.days = days;
         this.auto_scheduled = auto_scheduled;
         this.specified_time = specified_time;  // そのままの配列でもらう
