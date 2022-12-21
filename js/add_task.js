@@ -19,6 +19,12 @@ document.getElementById('submit__btn').addEventListener('click', function () {
 
     //新しいタスクのデータをフォームから取得し、Taskクラスに変換してScheduleクラスに格納
     var new_task = get_new_task();
+    //タスクの入力内容の妥当性を判断
+    if (form_check(new_task) == false) {
+        console.log("フォームエラー");
+        return;
+    }
+    //Scheduleクラスに格納
     user.schedule.addTask(new_task);
 
 
@@ -48,6 +54,32 @@ document.getElementById('submit__btn').addEventListener('click', function () {
 
 
 })
+
+//フォームチェック：入力内容に問題があればfalseを出力、メッセージを表示
+function form_check(task) {
+    var error_message_container = document.getElementById('error_message_container');
+    error_message_container.innerHTML = "";
+    var message = document.createElement("p");
+    var error_number = 0;
+
+    //nameが入力されているか
+    if (task.name == "") {
+        error_number += 1;
+        message.innerHTML = `タスク名を入力してください。`;
+        error_message_container.appendChild(message);
+    }
+    
+
+    if (error_number == 0) {
+        console.log(true);
+        return true;
+    } else {
+        console.log(false);
+        return false;
+    }
+
+}
+
 
 //フォームの動的化：タスクか予定か
 function Plan_or_Task() {
