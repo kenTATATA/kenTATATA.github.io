@@ -216,11 +216,6 @@ class Schedule{
     }
 }
 
-class Settings{
-    constructor() {
-
-    }
-}
 
 // var myLifestyle = new Schedule([], [], []);
 // var mySchedule = new Schedule([], [], []);
