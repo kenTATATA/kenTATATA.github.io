@@ -1,26 +1,52 @@
-var btn = document.getElementById('submit__btn');
+// なぜか他の関数が使えなくなる
+// import { Task } from '../js/class_Task.js';
+// import { User } from '../js/class_User.js';
+// import { Schedule } from '../js/class_Schedule.js';
+// import { Settings } from '../js/class_Settings.js';
 
+//(KIM)ユーザー情報を取得
+//////////////////////////////////////////////////////////////////////
+//(仮)ローカルにユーザー情報を作成
+var myLifestyle = new Schedule([], [], []);
+var mySchedule = new Schedule([], [], []);
+var mySettings = new Settings();
+var user = new User("山田太郎", myLifestyle, mySchedule, mySettings);
+//////////////////////////////////////////////////////////////////////
+
+//main関数
 //追加ボタンが押されたときの処理
-btn.addEventListener('click', function () {
-    //新しいタスクのデータをフォームから取得し、Taskクラスの変換してScheduleクラスに格納
+document.getElementById('submit__btn').addEventListener('click', function () {
+
+    //新しいタスクのデータをフォームから取得し、Taskクラスに変換してScheduleクラスに格納
     var new_task = get_new_task();
+    user.schedule.addTask(new_task);
 
 
-    //データベースから他のタスクを取得し、Taskクラスの変換してScheduleクラスに格納
+    //(KIM)データベースから他のタスクを取得し、Taskクラスの変換してScheduleクラスに格納
+    //////////////////////////////////////////////////////////////////////
+    //(仮)ローカルに最初から入っているタスクを作成しScheduleクラスに格納
+    var task1 = new Task(123, "デザイン開発", "課題", "Webページのデザインを開発せねば〜", false, false, false, false, (new Date(2022, 11, 14, 18, 20)).getTime(), 3, 1, true, [[0, 0]]);
+    var task2 = new Task(101, "情報線形代数レポート課題", "課題", "早く早く終わりたい！！", false, false, false, false, (new Date(2022, 11, 14, 19, 0)).getTime(), 1, 1, true, [[0, 0]]);
+    var task3 = new Task(100, "デザイン課題", "課題", "デザインの授業の課題！！！！！！！", false, false, false, false, (new Date(2023, 11, 14, 18, 0)).getTime(), null, 1, false, [[(new Date(2022, 11, 14, 5, 25)).getTime(), (new Date(2022, 11, 14, 6, 0)).getTime()]]);
+    var task4 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, (new Date(2022, 11, 14, 18, 30)).getTime(), 3, 1, true, [[0, 0]]);
+    var task5 = new Task(182, "ドイツ語基礎", "課題", "ドイツ語で会話をしてみよう", false, false, false, false, (new Date(2022, 11, 14, 18, 30)).getTime(), 3, 1, true, [[0, 0]]);
+    user.schedule.addTask(task1);
+    user.schedule.addTask(task2);
+    user.schedule.addTask(task3);
+    user.schedule.addTask(task4);
+    user.schedule.addTask(task5);
+    //////////////////////////////////////////////////////////////////////
 
-
-    //自動スケジューリング
-
-
-    //Scheduleクラスのall_tasksのタスクをデータベースに格納
-
+    //(KIM)Scheduleクラスのall_tasksのタスクをデータベースに格納
+    all_tasks = user.schedule.returnAllTasks();
+    console.log(all_tasks);
 
     //トップページに戻る
     //トップページでデータベースからタスクを取得
     //トップページでタスクを表示
+    window.location.href = '../constructor/index.html';
 
 
-    console.log(new_task);
 })
 
 //フォームの動的化：タスクか予定か
@@ -260,7 +286,7 @@ function get_new_task() {
     var textarea_array = formElements.getElementsByTagName("textarea");
 
     for (var i = 0; i < input_array.length; i++) {
-        item = input_array.item(i);
+        var item = input_array.item(i);
         if (item.type == "checkbox") {
             if (item.checked === true) {
                 a[item.name] = true;
@@ -274,12 +300,12 @@ function get_new_task() {
     }
 
     for (var i = 0; i < select_array.length; i++) {
-        item = select_array.item(i);
+        var item = select_array.item(i);
         a[item.name] = item.value;
     }
 
     for (var i = 0; i < textarea_array.length; i++) {
-        item = textarea_array.item(i);
+        var item = textarea_array.item(i);
         a[item.name] = item.value;
     }
 

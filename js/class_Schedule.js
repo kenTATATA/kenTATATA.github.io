@@ -1,5 +1,4 @@
-// import {Task} from "./task.js"  // これが上手くいかない..
-// import {Task} from "/Users/NEC-PCuser/AutoCalendar-prototype2/AutoCalendar-prototype2/js/task.js"
+// import {Task} from '../js/class_Task.js';
 
 class Schedule {
     constructor(auto_schedule, on_time, other) {
@@ -187,33 +186,34 @@ class Schedule {
 }
 
 
-var schedule = 0;
-var plan = 1;
+// var schedule = 0;
+// var plan = 1;
 
-var myLifestyle = new Schedule([], [], []);
-var mySchedule = new Schedule([], [], []);
-var mySettings = new Settings();
+// var myLifestyle = new Schedule([], [], []);
+// var mySchedule = new Schedule([], [], []);
+// var mySettings = new Settings();
 
-var user1 = new User("山田太郎", myLifestyle, mySchedule, mySettings);
+// var user1 = new User("山田太郎", myLifestyle, mySchedule, mySettings);
+
 // constructor(id, name, category, overview, favorite, plan_or_task, finished, duplicate, deadline, required_time, days, auto_scheduled, specified_time)
-var task1 = new Task(123, "デザイン開発", "課題", "Webページのデザインを開発せねば〜", false, false, false, false, (new Date(2022, 11, 14, 18, 20)).getTime(), 3, 1, true, [[0, 0]]);
-var task2 = new Task(101, "情報線形代数レポート課題", "課題", "早く早く終わりたい！！", false, false, false, false, (new Date(2022, 11, 14, 19, 0)).getTime(), 1, 1, true, [[0, 0]]);
-var task3 = new Task(100, "デザイン課題", "課題", "デザインの授業の課題！！！！！！！", false, false, false, false, (new Date(2023, 11, 14, 18, 0)).getTime(), null, 1, false, [[(new Date(2022, 11, 14, 5, 25)).getTime(), (new Date(2022, 11, 14, 6, 0)).getTime()]]);
-var task4 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, (new Date(2022, 11, 14, 18, 30)).getTime(), 3, 1, true, [[0, 0]]);
-var task5 = new Task(182, "ドイツ語基礎", "課題", "ドイツ語で会話をしてみよう", false, false, false, false, (new Date(2022, 11, 14, 18, 30)).getTime(), 3, 1, true, [[0, 0]]);
+// var task1 = new Task(123, "デザイン開発", "課題", "Webページのデザインを開発せねば〜", false, false, false, false, (new Date(2022, 11, 14, 18, 20)).getTime(), 3, 1, true, [[0, 0]]);
+// var task2 = new Task(101, "情報線形代数レポート課題", "課題", "早く早く終わりたい！！", false, false, false, false, (new Date(2022, 11, 14, 19, 0)).getTime(), 1, 1, true, [[0, 0]]);
+// var task3 = new Task(100, "デザイン課題", "課題", "デザインの授業の課題！！！！！！！", false, false, false, false, (new Date(2023, 11, 14, 18, 0)).getTime(), null, 1, false, [[(new Date(2022, 11, 14, 5, 25)).getTime(), (new Date(2022, 11, 14, 6, 0)).getTime()]]);
+// var task4 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, (new Date(2022, 11, 14, 18, 30)).getTime(), 3, 1, true, [[0, 0]]);
+// var task5 = new Task(182, "ドイツ語基礎", "課題", "ドイツ語で会話をしてみよう", false, false, false, false, (new Date(2022, 11, 14, 18, 30)).getTime(), 3, 1, true, [[0, 0]]);
 
-user1.schedule.addTask(task1);
-user1.schedule.addTask(task2);
-user1.schedule.addTask(task3);
-user1.schedule.addTask(task4);
-user1.schedule.addTask(task5);
+// user1.schedule.addTask(task1);
+// user1.schedule.addTask(task2);
+// user1.schedule.addTask(task3);
+// user1.schedule.addTask(task4);
+// user1.schedule.addTask(task5);
 
-//user1.schedule.viewTasks();
+// user1.schedule.viewTasks();
 
-console.log(user1.schedule.returnAllTasks());
+// console.log(user1.schedule.returnAllTasks());
 
-user1.schedule.removeTask(task2);
+// user1.schedule.removeTask(task2);
 
-//user1.schedule.viewTasks();
+// //user1.schedule.viewTasks();
 
-console.log(user1.schedule.returnAllTasks());
+// console.log(user1.schedule.returnAllTasks());
