@@ -44,7 +44,7 @@ document.getElementById('submit__btn').addEventListener('click', function () {
     //トップページに戻る
     //トップページでデータベースからタスクを取得
     //トップページでタスクを表示
-    window.location.href = '../constructor/index.html';
+    // window.location.href = '../constructor/index.html';
 
 
 })
