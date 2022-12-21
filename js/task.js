@@ -1,156 +1,200 @@
-// class Task {
-//     /**
-//      * @param {Number} id :Taskのid
-//      * @param {String} name :Task名
-//      * @param {Date} deadline :Taskの締め切り
-//      * @param {Number} time :Taskの所要時間(時間)
-//      * @param {Boolean} auto_scheduled :自動スケジューリングするか
-//      * @param {Boolean} duplicate :Taskの重複を許すか
-//      * @param {Boolean} all_day :Taskが終日かどうか
-//      * @param {Number} days
-//      * @param {String} overview
-//      * @param {Stirng} category
-//      * @param {Boolean} favorite
-//      */
-//     constructor(id, name, deadline, time, auto_scheduled, duplicate, all_day, days, overview, category, favorite) {
-//         this.id = id;
-//         this.name = name;
-//         this.deadline = deadline;
-//         this.time = time;
-//         this.auto_scheduled = auto_scheduled;
-//         this.duplicate = duplicate;
-//         this.all_day = all_day;
-//         this.days = days;
-//         this.overview = overview;
-//         this.category = category;
-//         this.favorite = favorite;
-//         this.set_time = [deadline.getTime()-time*36000, deadline.getTime()];// start, endの時刻をECMAScript元期からの経過ミリ数で表す
-//     }
+export class Task {
+  /**
+   * @param {Number} id :Taskのid
+   * @param {String} name :Task名
+   * @param {String} overview :メモ
+   * @param {String} category :カテゴリー
+   * @param {Boolean} favorite :お気に入り
+   * @param {Number} plan_or_task :予定かタスクか
+   * @param {Boolean} finished :終了済みか
+   * @param {Boolean} duplicate :重複を許すか
+   * @param {Date} deadline :Taskの締め切り時間
+   * @param {Number} required_time :Taskの推定所要時間(時間)
+   * @param {Number} days :何日に分けるか
+   * @param {Boolean} auto_scheduled :自動スケジューリングするか
+   * @param {List} specified_time :開始時間, 終了時間
+   */
+  constructor(
+    id,
+    name,
+    category,
+    overview,
+    favorite,
+    plan_or_task,
+    finished,
+    duplicate,
+    deadline,
+    required_time,
+    days,
+    auto_scheduled,
+    specified_time
+  ) {
+    this.id = id;
+    this.name = name;
+    this.category = category;
+    this.overview = overview;
+    this.favorite = favorite;
+    this.plan_or_task = plan_or_task;
+    this.finished = finished;
+    this.duplicate = duplicate;
+    this.deadline = deadline;
+    this.required_time = required_time * 3600000;
+    this.days = days;
+    this.auto_scheduled = auto_scheduled;
+    this.specified_time = specified_time; // そのままの配列でもらう
 
-//     get getId() {
-//         return this.id;
-//     }
+    var now = new Date(); // 現在時刻
+    //this.specified_time = [now.getTime(), now.getTime() + this.required_time];
+  }
 
-//     get getName() {
-//         return this.name;
-//     }
+  get getId() {
+    return this.id;
+  }
 
-//     get getDeadline() {
-//         return this.deadline;
-//     }
+  get getName() {
+    return this.name;
+  }
 
-//     get getTime() {
-//         return this.time;
-//     }
+  get getDeadline() {
+    return this.deadline;
+  }
 
-//     get isAutoScheduled() {
-//         return this.auto_scheduling;
-//     }
+  get getRequiredTime() {
+    return this.required_time;
+  }
 
-//     get isDuplicate() {
-//         return this.duplicate;
-//     }
+  get isAutoScheduled() {
+    return this.auto_scheduling;
+  }
 
-//     get isAllDay() {
-//         return this.all_day;
-//     }
+  get isDuplicate() {
+    return this.duplicate;
+  }
 
-//     get getDays() {
-//         return this.days;
-//     }
+  get isAllDay() {
+    return this.all_day;
+  }
 
-//     get getOverview() {
-//         return this.overview;
-//     }
+  get getDays() {
+    return this.days;
+  }
 
-//     get getCategory() {
-//         return this.category;
-//     }
-    
-//     get isFavorite() {
-//         return this.favorite;
-//     }
+  get getOverview() {
+    return this.overview;
+  }
 
-//     get getSetTime() {
-//         return this.set_time;
-//     }
+  get getCategory() {
+    return this.category;
+  }
 
-//     /**
-//      * @param {Number} id
-//      */
-//     set setId(id) {
-//         this.id = id;
-//     }
-    
-//     /**
-//      * @param {String} name
-//      */
-//     set setName(name) {
-//         this.name = name;
-//     }
+  get isFavorite() {
+    return this.favorite;
+  }
 
-//     /**
-//      * @param {Number} deadline
-//      */
-//     set setDeadline(deadline) {
-//         this.deadline = deadline;
-//         this.set_time[0] = deadline;
-//     }
+  get getStartTime() {
+    return this.specified_time[0];
+  }
 
-//     /**
-//      * @param {Number} time
-//      */
-//     set setTime(time) {
-//         this.time = time;
-//         this.set_time[1] = time;
-//     }
+  get getEndTime() {
+    return this.specified_time[1];
+  }
 
-//     /**
-//      * @param {Boolean} auto_scheduled
-//      */
-//     set setAutoScheduled(auto_scheduled) {
-//         this.auto_scheduled = auto_scheduled;
-//     }
+  /**
+   * @param {Number} id
+   */
+  set setId(id) {
+    this.id = id;
+  }
 
-//     /**
-//      * @param {Boolean} duplicate
-//      */
-//     set setDuplicated(duplicate) {
-//         this.duplicate = duplicate;
-//     }
+  /**
+   * @param {String} name
+   */
+  set setName(name) {
+    this.name = name;
+  }
 
-//     /**
-//      * @param {Boolean} all_day
-//      */
-//     set setAllDay(all_day) {
-//         this.all_day = all_day;
-//     }
+  /**
+   * @param {Number} deadline
+   */
+  set setDeadline(deadline) {
+    this.deadline = deadline;
+  }
 
-//     /**
-//      * @param {Number} days
-//      */
-//     set setDays(days) {
-//         this.days = days;
-//     }
+  /**
+   * @param {Number} time
+   */
+  set setRequiredTime(time) {
+    this.required_time = time;
+  }
 
-//     /**
-//      * @param {String} overview
-//      */
-//     set setOverview(overview) {
-//         this.overview = overview;
-//     }
+  /**
+   * @param {Boolean} auto_scheduled
+   */
+  set setAutoScheduled(auto_scheduled) {
+    this.auto_scheduled = auto_scheduled;
+  }
 
-//     /**
-//      * @param {String} category
-//      */
-//     set setCategory(category) {
-//         this.category = category;
-//     }
+  /**
+   * @param {Boolean} duplicate
+   */
+  set setDuplicated(duplicate) {
+    this.duplicate = duplicate;
+  }
 
-//     /**
-//      * @param {Boolean} favorite
-//      */
-//     set setFavorite(favorite) {
-//         this.favorite = favorite;
-//     }
-// }
+  /**
+   * @param {Boolean} all_day
+   */
+  set setAllDay(all_day) {
+    this.all_day = all_day;
+  }
+
+  /**
+   * @param {Number} days
+   */
+  set setDays(days) {
+    this.days = days;
+  }
+
+  /**
+   * @param {String} overview
+   */
+  set setOverview(overview) {
+    this.overview = overview;
+  }
+
+  /**
+   * @param {String} category
+   */
+  set setCategory(category) {
+    this.category = category;
+  }
+
+  /**
+   * @param {Boolean} favorite
+   */
+  set setFavorite(favorite) {
+    this.favorite = favorite;
+  }
+
+  /**
+   *  @param {Number} start
+   */
+  set setStartTime(start) {
+    this.specified_time[0] = start;
+  }
+
+  /**
+   *  @param {Number} end
+   */
+  set setEndTime(end) {
+    this.specified_time[1] = end;
+  }
+
+  /**
+   * @param {Number} start
+   */
+  set setSpecifiedTime(start) {
+    this.setStartTime(start);
+    this.setEndTime(start + this.required_time);
+  }
+}
