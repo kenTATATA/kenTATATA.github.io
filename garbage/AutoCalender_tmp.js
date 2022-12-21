@@ -2,12 +2,11 @@
 // import {Task} from "/Users/NEC-PCuser/AutoCalendar-prototype2/AutoCalendar-prototype2/js/task.js"
 
 class Schedule {
-    constructor() {
+    constructor(auto_schedule, on_time, other) {
         // this.time_series_tasks = []; // 時系列なTask
-        this.auto_schedule = []; //自動スケジューリングするTask
-        this.on_time = []; //時間が決まっているTask,予定
-        this.other_tasks = []; // 重複を許すTask
-        this.all_tasks = []; // 全てのTask
+        this.auto_schedule = auto_schedule; //自動スケジューリングするTask
+        this.on_time = on_time; //時間が決まっているTask,予定
+        this.other = other; // 重複を許すTask
     }
 
     AutoScheduling() {
@@ -27,7 +26,7 @@ class Schedule {
 
             return a.deadline < b.deadline ? -1 : 1;
         });
-        this.auto_schedule[0].specified_time[0][0] = (new Date()).getTime();
+        this.auto_schedule[0].specified_time[0][0] = (new Date()).getTime() + 600000;  // 10分余裕を持たせておく
         this.auto_schedule[0].specified_time[0][1] = (this.auto_schedule[0].specified_time[0][0] + this.auto_schedule[0].required_time);
         // 指定時間の変更
         var j = 0;
@@ -112,49 +111,61 @@ class Schedule {
      */
     removeTask(task) {
         var id = task.id;
-        if (task.isAllDay || task.isDuplicate) {
-            tasks = this.other_tasks;
+        var tasks = [];
+        if(task.auto_scheduled) {
+            tasks = this.auto_schedule;
+        } else if(task.duplicate){
+            tasks = this.other;
         } else {
-            tasks = this.time_series_tasks;
+            tasks = this.on_time;
         }
-        for (var i = 0; i < this.tasks.length; i++) {
-            if (this.tasks[i].getId == id) {
-                this.tasks.splice(i, 1);
+        for(var i=0; i < tasks.length;i++) {
+            if(tasks[i].id == id) {
+                tasks.splice(i,1);
             }
         }
+        this.AutoScheduling();
     }
 
     // all_tasksに全てのtaskを追加するモジュール (ここで, 分割した場合は統合する？) 
     returnAllTasks() {
         var i = 0;
         var j = 0;
+        var all_tasks = [];
         while (i < this.on_time.length || j < this.auto_schedule.length) {
             if (i >= this.on_time.length) {
-                this.all_tasks.push(this.auto_schedule[j]);
+                all_tasks.push(this.auto_schedule[j]);
                 j++;
             }
             else if (j >= this.auto_schedule.length) {
-                this.all_tasks.push(this.on_time[i]);
+                all_tasks.push(this.on_time[i]);
                 i++;
             }
             else {
                 if (this.on_time[i].specified_time[0][0] > this.auto_schedule[j].specified_time[0][0]) {
-                    this.all_tasks.push(this.auto_schedule[j]);
+                    all_tasks.push(this.auto_schedule[j]);
                     j++;
                 } else {
-                    this.all_tasks.push(this.on_time[i]);
+                    all_tasks.push(this.on_time[i]);
                     i++;
                 }
             }
         }
-        return this.all_tasks;
+        for (i = 0; i < this.other.length; i++){
+            all_tasks.push(this.other[i]);
+        }
+        console.log("全ての予定を表示");
+        for (const events of all_tasks) {
+            console.log("タスク名:" + events.name + "\n開始時間:" + (new Date(events.specified_time[0][0])).toString() + "\n終了時間:" + (new Date(events.specified_time[0][1])).toString() + "\n締切時間:" + (new Date(events.deadline)).toString());
+        }
+        return all_tasks;
     }
 
     // 時系列タスクの表示をするモジュール
     viewTasks() {
 
-        this.returnAllTasks();
-        for (const event of this.all_tasks) {
+        all_tasks = this.returnAllTasks();
+        for (const event of all_tasks) {
             var added_task = document.createElement('added_task');
             added_task.innerHTML = `
             <div class="task__container">
@@ -179,17 +190,17 @@ class Schedule {
 var schedule = 0;
 var plan = 1;
 
-var myLifestyle = new Schedule();
-var mySchedule = new Schedule();
+var myLifestyle = new Schedule([], [], []);
+var mySchedule = new Schedule([], [], []);
 var mySettings = new Settings();
 
 var user1 = new User("山田太郎", myLifestyle, mySchedule, mySettings);
 // constructor(id, name, category, overview, favorite, plan_or_task, finished, duplicate, deadline, required_time, days, auto_scheduled, specified_time)
-var task1 = new Task(123, "デザイン開発", "課題", "Webページのデザインを開発せねば〜", false, false, false, false, new Date(2022, 11, 14, 18, 20), 3, 1, true, [[0, 0]]);
-var task2 = new Task(101, "情報線形代数レポート課題", "課題", "早く早く終わりたい！！", false, false, false, false, new Date(2022, 11, 14, 19, 0), 1, 1, true, [[0, 0]]);
-var task3 = new Task(100, "デザイン課題", "課題", "デザインの授業の課題！！！！！！！", false, false, false, false, new Date(2023, 11, 14, 18, 0), null, 1, false, [[(new Date(2022, 11, 14, 5, 25)).getTime(), (new Date(2022, 11, 14, 6, 0)).getTime()]]);
-var task4 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, new Date(2022, 11, 14, 18, 30), 3, 1, true, [[0, 0]]);
-var task5 = new Task(182, "ドイツ語基礎", "課題", "ドイツ語で会話をしてみよう", false, false, false, false, new Date(2022, 11, 14, 18, 30), 3, 1, true, [[0, 0]]);
+var task1 = new Task(123, "デザイン開発", "課題", "Webページのデザインを開発せねば〜", false, false, false, false, (new Date(2022, 11, 14, 18, 20)).getTime(), 3, 1, true, [[0, 0]]);
+var task2 = new Task(101, "情報線形代数レポート課題", "課題", "早く早く終わりたい！！", false, false, false, false, (new Date(2022, 11, 14, 19, 0)).getTime(), 1, 1, true, [[0, 0]]);
+var task3 = new Task(100, "デザイン課題", "課題", "デザインの授業の課題！！！！！！！", false, false, false, false, (new Date(2023, 11, 14, 18, 0)).getTime(), null, 1, false, [[(new Date(2022, 11, 14, 5, 25)).getTime(), (new Date(2022, 11, 14, 6, 0)).getTime()]]);
+var task4 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, (new Date(2022, 11, 14, 18, 30)).getTime(), 3, 1, true, [[0, 0]]);
+var task5 = new Task(182, "ドイツ語基礎", "課題", "ドイツ語で会話をしてみよう", false, false, false, false, (new Date(2022, 11, 14, 18, 30)).getTime(), 3, 1, true, [[0, 0]]);
 
 user1.schedule.addTask(task1);
 user1.schedule.addTask(task2);
@@ -197,6 +208,12 @@ user1.schedule.addTask(task3);
 user1.schedule.addTask(task4);
 user1.schedule.addTask(task5);
 
-user1.schedule.viewTasks();
+//user1.schedule.viewTasks();
+
+console.log(user1.schedule.returnAllTasks());
+
+user1.schedule.removeTask(task2);
+
+//user1.schedule.viewTasks();
 
 console.log(user1.schedule.returnAllTasks());
