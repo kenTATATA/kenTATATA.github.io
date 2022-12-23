@@ -19,13 +19,13 @@ submitButton.onclick = () => {
     });
 };
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // const uid = user.uid;
-    // ...
-  } else {
-    // document.location.href = "index.html";
-    // User is signed out
-    // ...
-  }
-});
+// onAuthStateChanged(auth, (user) => {
+//   if (user) {
+//     // const uid = user.uid;
+//     // ...
+//   } else {
+//     // document.location.href = "index.html";
+//     // User is signed out
+//     // ...
+//   }
+// });

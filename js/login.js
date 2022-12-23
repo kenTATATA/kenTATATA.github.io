@@ -5,6 +5,7 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithRedirect,
+  signInWithPopup,
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
 const provider = new GoogleAuthProvider();
@@ -16,7 +17,7 @@ const submitButton = document.getElementById("submit");
 
 if (submitButton != null) {
   submitButton.addEventListener("click", function () {
-    signInWithRedirect(auth, provider)
+    signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -24,38 +25,49 @@ if (submitButton != null) {
         // The signed-in user info.
         const user = result.user;
         // ...
-        window.location.replace("http://127.0.0.1:5500/constructor/index.html");
       })
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
         // The email of the user's account used.
-        // const email = error.customData.email;
+        const email = error.customData.email;
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
       });
+
+    // signInWithRedirect(auth, provider)
+    //   .then((result) => {
+    //     // // This gives you a Google Access Token. You can use it to access the Google API.
+    //     // const credential = GoogleAuthProvider.credentialFromResult(result);
+    //     // const token = credential.accessToken;
+    //     // // The signed-in user info.
+    //     // const user = result.user;
+    //     // ...
+    //     document.location.href = "index.html";
+    //   })
+    //   .catch((error) => {
+    //     // Handle Errors here.
+    //     const errorCode = error.code;
+    //     const errorMessage = error.message;
+    //     // The email of the user's account used.
+    //     // const email = error.customData.email;
+    //     // The AuthCredential type that was used.
+    //     const credential = GoogleAuthProvider.credentialFromError(error);
+    //     // ...
+    //   });
   });
 }
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    window.location.replace("http://127.0.0.1:5500/constructor/index.html");
+    console.log(user.uid);
+    document.location.href = "index.html";
   } else {
+    console.log("loggedout");
+
     // User is signed out
     // ...
   }
 });
-
-// if (submitButton != null) {
-//   submitButton.addEventListener("click", function () {
-//     signIn(auth)
-//       .then(() => {
-//         console.log("bye");
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//       });
-//   });
-// }

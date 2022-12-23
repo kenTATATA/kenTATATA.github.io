@@ -7,12 +7,11 @@ import {
   getDoc,
   getFirestore,
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+
 import { Task } from "./task.js";
-import { uid } from "./get_user_id.js";
 
 const db = getFirestore(app);
 
-console.log(`uid is ${uid}`);
 const userRef = doc(db, "userData", "testuid_getData");
 const docsnap = await getDoc(userRef);
 
