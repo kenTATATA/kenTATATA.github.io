@@ -1,4 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-app.js";
+import { app } from "./firebase_config.js";
+
 import {
   collection,
   getDocs,
@@ -280,17 +281,6 @@ add_todo.addEventListener("click", function (e) {
 
 //data send
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAtUFSGnjJcRdC4Y8dL8pDJFO1ZeHOeRyc",
-  authDomain: "auto-a42ab.firebaseapp.com",
-  projectId: "auto-a42ab",
-  storageBucket: "auto-a42ab.appspot.com",
-  messagingSenderId: "819879919631",
-  appId: "1:819879919631:web:511870f4f26e97c767637a",
-  measurementId: "G-YZLN75JLBX",
-};
-
-const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 //ここのtestuidのところにuserのuidを入れる

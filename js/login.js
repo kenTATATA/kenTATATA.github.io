@@ -1,4 +1,3 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
 // import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
 import {
   getAuth,
@@ -10,29 +9,7 @@ import {
 const provider = new GoogleAuthProvider();
 provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAtUFSGnjJcRdC4Y8dL8pDJFO1ZeHOeRyc",
-  authDomain: "auto-a42ab.firebaseapp.com",
-  projectId: "auto-a42ab",
-  storageBucket: "auto-a42ab.appspot.com",
-  messagingSenderId: "819879919631",
-  appId: "1:819879919631:web:511870f4f26e97c767637a",
-  measurementId: "G-YZLN75JLBX",
-};
-
-const app = initializeApp(firebaseConfig);
 const auth = getAuth();
-
-// onAuthStateChanged(auth, (user) => {
-//   if (user) {
-//     document.location.href = "after_login.html";
-//     // const uid = user.uid;
-//     // ...
-//   } else {
-//     // User is signed out
-//     // ...
-//   }
-// });
 
 const submitButton = document.getElementById("submit");
 
@@ -71,16 +48,3 @@ if (submitButton != null) {
       });
   });
 }
-
-const nameSpace = document.getElementById("data");
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // const uid = user.uid;
-    console.log(user.uid);
-    console.log(getAuth().currentUser.displayName);
-    document.location.href = "index.html";
-  } else {
-    // document.location.href = "index.html";
-  }
-});
