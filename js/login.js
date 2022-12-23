@@ -1,3 +1,4 @@
+import { app } from "./firebase_config.js";
 // import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
 import {
   getAuth,
@@ -23,6 +24,7 @@ if (submitButton != null) {
         // The signed-in user info.
         const user = result.user;
         // ...
+        window.location.replace("http://127.0.0.1:5500/constructor/index.html");
       })
       .catch((error) => {
         // Handle Errors here.
@@ -37,14 +39,23 @@ if (submitButton != null) {
   });
 }
 
-if (submitButton != null) {
-  submitButton.addEventListener("click", function () {
-    signIn(auth)
-      .then(() => {
-        console.log("bye");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
-}
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    window.location.replace("http://127.0.0.1:5500/constructor/index.html");
+  } else {
+    // User is signed out
+    // ...
+  }
+});
+
+// if (submitButton != null) {
+//   submitButton.addEventListener("click", function () {
+//     signIn(auth)
+//       .then(() => {
+//         console.log("bye");
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//   });
+// }

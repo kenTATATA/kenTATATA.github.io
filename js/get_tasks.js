@@ -8,20 +8,18 @@ import {
   getFirestore,
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 import { Task } from "./task.js";
-import { Schedule } from "./class_Schedule.js";
-import { Settings } from "./class_Settings.js";
-import { User } from "./class_User.js";
+import { uid } from "./get_user_id.js";
 
 const db = getFirestore(app);
 
+console.log(`uid is ${uid}`);
 const userRef = doc(db, "userData", "testuid_getData");
 const docsnap = await getDoc(userRef);
-const data = docsnap.data().testtask1;
 
 // console.log(docsnap.data()[Object.keys(docsnap.data())[1]]);
 // console.log([Object.keys(docsnap.data())[1]]);
 
-let all_tasks = [];
+export let all_tasks = [];
 
 for (let i = 0; i < Object.keys(docsnap.data()).length; i++) {
   let data = docsnap.data()[Object.keys(docsnap.data())[i]];

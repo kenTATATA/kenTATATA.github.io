@@ -1,3 +1,4 @@
+import { app } from "./firebase_config.js";
 import {
   getAuth,
   onAuthStateChanged,
@@ -6,8 +7,8 @@ import {
 
 const auth = getAuth();
 
-const submitButton = document.getElementById("logout");
-submitButton.addEventListener("click", function () {
+const submitButton = document.getElementById("logout_btn");
+submitButton.onclick = () => {
   // console.log("hello");
   signOut(auth)
     .then(() => {
@@ -16,7 +17,7 @@ submitButton.addEventListener("click", function () {
     .catch((error) => {
       console.log(error);
     });
-});
+};
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
