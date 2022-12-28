@@ -35,11 +35,11 @@ function task_list(tasks) {
         var task_container = document.createElement("div");
         task_container.setAttribute('name', 'task_' + String(i));
         task_container.innerHTML = `
-        <a href="#">${task.name}</a>
+        ${task.name}<br>
             `;
         for (const time of task.specified_time) {
             task_container.innerHTML += `
-        <p>${time[0]} -> ${time[1]}</p>
+        ${time[0]} -> ${time[1]}<br>
             `;
         }
 
