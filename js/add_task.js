@@ -17,8 +17,15 @@ var user = new User("山田太郎", myLifestyle, mySchedule, mySettings);
 //追加ボタンが押されたときの処理
 document.getElementById('submit__btn').addEventListener('click', function () {
 
-    //新しいタスクのデータをフォームから取得し、Taskクラスに変換してScheduleクラスに格納
+    //新しいタスクのデータをフォームから取得し、Taskクラスに変換
     var new_task = get_new_task();
+    console.log(new_task);
+    //タスクの入力内容の妥当性を判断
+    if (form_check(new_task) == false) {
+        console.log("フォームエラー");
+        return;
+    }
+    //Scheduleクラスに格納
     user.schedule.addTask(new_task);
 
 
@@ -48,6 +55,109 @@ document.getElementById('submit__btn').addEventListener('click', function () {
 
 
 })
+
+//フォームチェック：入力内容に問題があればfalseを出力、メッセージを表示
+function form_check(task) {
+    error_messages_container = document.getElementById('error_messages_container');
+    error_messages_container.innerHTML = "";
+    error_number = 0;
+    var present_time = new Date();
+
+    //nameが入力されているか
+    if (task.name == "") {
+        error_message(`※タスク名を入力してください。`);
+    }
+
+    //Taskのときのみ
+    if (task.plan_or_task == "Task") {
+        //deadlineが入力されているか、入力されている場合、現在時刻を越えていないか
+        if (Number.isNaN(task.deadline.getTime())) {
+            error_message(`※締切日を入力してください。`);
+        } else {
+            if (task.deadline < present_time) {
+                error_message(`※締切日を過ぎています。`);
+            }
+        }
+
+        //required_timeが入力されているか
+        if (task.required_time == 0) {
+            error_message(`※推定予定時間を入力してください。`);
+        }
+
+    }
+
+    //auto_scheduledがfalseのとき
+    if (task.auto_scheduled == false) {
+        var error_number_2 = 0;
+
+        for (const times of task.specified_time) {
+            //実施時間が入力されているか、現在時刻を越えていないか
+            var error_number_3 = 0;
+            for (const time of times) {
+                if (Number.isNaN(time.getTime())) {
+                    error_number_2 += 1;
+                    error_number_3 += 1;
+                } else {
+                    if (time < present_time) {
+                        error_number_2 += 1;
+                        error_number_3 += 1;
+                    }
+                }
+            }
+
+            //実施時間の順序は正しいか
+            if (error_number_3 == 0) {
+                if (times[0] > times[1]) {
+                    error_number_2 += 1;
+                }
+            }
+        }
+
+        //実施時間がすべて入力されている場合、それらに重複は無いか
+        if (error_number_2 == 0) {
+            task.specified_time.sort(function (a, b) {
+                return (a[0] > b[0] ? 1 : -1);
+            });
+
+            var time_list = task.specified_time.flat();
+            var time_list_sorted = time_list.map((x) => x);
+            time_list_sorted.sort(function (a, b) {
+                return (a > b ? 1 : -1);
+            });
+
+            console.log(time_list);
+            console.log(time_list_sorted);
+
+            if (time_list.toString() != time_list_sorted.toString()) {
+                error_number_2 = -1;
+            }
+        }
+
+        if (error_number_2 > 0) {
+            error_message(`※実施時間を正しく入力してください。`);
+        } else if (error_number_2 < 0) {
+            error_message(`※実施時間が重複しています。`);
+        }
+    }
+
+    if (error_number == 0) {
+        console.log(true);
+        return true;
+    } else {
+        console.log(false);
+        return false;
+    }
+
+}
+
+//フォームチェックでエラーメッセージを表示する関数
+function error_message(message) {
+    error_number += 1;
+    var message_container = document.createElement("p");
+    message_container.innerHTML = message;
+    error_messages_container.appendChild(message_container);
+}
+
 
 //フォームの動的化：タスクか予定か
 function Plan_or_Task() {
