@@ -7,15 +7,14 @@ import {
   getDoc,
   getFirestore,
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
-
 import { Task } from "./task.js";
 
+const user_id = localStorage.getItem("uid");
 const db = getFirestore(app);
-
-const userRef = doc(db, "userData", "testuid_getData");
+const userRef = doc(db, "userData", user_id);
 const docsnap = await getDoc(userRef);
 
-// console.log(docsnap.data()[Object.keys(docsnap.data())[1]]);
+console.log(docsnap.data()[Object.keys(docsnap.data())[1]]);
 // console.log([Object.keys(docsnap.data())[1]]);
 
 export let all_tasks = [];

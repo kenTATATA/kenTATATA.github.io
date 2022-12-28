@@ -18,6 +18,9 @@ onAuthStateChanged(auth, (user) => {
     console.log(uid);
     name_space.innerText = name;
     email_space.innerText = email;
+    localStorage.setItem("uid", uid);
+    localStorage.setItem("email", email);
+    localStorage.setItem("name", name);
   } else {
     console.log("user is signed out");
   }
