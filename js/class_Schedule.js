@@ -1,7 +1,7 @@
 // import {Task} from '../js/class_Task.js';
 
-class Schedule{
-    constructor(auto_schedule, on_time, other){  // データベースに元々格納してあるデータを持ってくる.
+class Schedule {
+    constructor(auto_schedule, on_time, other) {  // データベースに元々格納してあるデータを持ってくる.
         this.auto_schedule = auto_schedule; //自動スケジューリングするTask
         this.on_time = on_time; //時間が決まっているTask,予定
         this.other = other; // 重複を許すTask
@@ -41,43 +41,20 @@ class Schedule{
             if (event.finished == true) {
                 continue;
             }
-            if (event.days == 1) {  // 子タスクがない場合
-                event.specified_time[0] = (new Date()).getTime() + 600000;  // 10分余裕を持たせておく
-                event.specified_time[1] = event.specified_time[0] + event.required_time;
-                var i = 0;
-                for (; i < times.length; i++) {
-                    if (event.specified_time[1] <= times[i][0]) {  // 各タスクの終了時間が固定時間の開始時間より速いなら
-                        break;
-                    }
-                    if ((times[i][0] >= event.specified_time[0] && times[i][0] < event.specified_time[1]) ||  // スタートをまたいでいないか?
-                        (times[i][1] > event.specified_time[0] && times[i][1] <= event.specified_time[1]) ||  // エンドまたいでいないか?
-                        (times[i][0] <= event.specified_time[0] && times[i][1] >= event.specified_time[1])) { // 元からある予定の間にすっぽり埋もれていないか?
-                        event.specified_time[0] = times[i][1] + 10 * 60 * 1000;  // 10分の休憩を持たせておく.
-                        event.specified_time[1] = event.specified_time[0] + event.required_time;
-                    }
-                }
-                if (event.specified_time[1] > event.deadline) {  // 各タスクの終了時間が締め切りを過ぎていたら
-                    console.log("この予定「" + event.name + "」の\n終了時間:" + (new Date(event.specified_time[1])).toString() + "は\n締切時間:" + (new Date(event.deadline)).toString() + "を過ぎてしまいます.");
-                    console.log("警告:この予定の追加はやめといたほうがいいよ!");
-                    // this.removeTask(event);
-                }
-                else {  // 締め切りの過ぎていないタスクを追加する
-                    times.splice(i, 0, event.specified_time);
-                }
-            }
-            else {  // 子タスクがある場合
+            if (event.days == 1) {  // 日割りしない場合
+                console.log(event.name);
                 // 一つ目の子タスクを追加
-                event.task_children[0].specified_time[0] = (new Date()).getTime() + 600000;  // 10分余裕を持たせておく
+                event.task_children[0].specified_time[0] = (new Date()).getTime() + 10 * 60 * 1000;  // 10分余裕を持たせておく
                 event.task_children[0].specified_time[1] = event.task_children[0].specified_time[0] + event.task_children[0].required_time;
                 var j = 0;
-                for (var i = 0; i < event.task_children.length; i++){  // 各子タスクについて, [day == 1] の時と同様の動作を実行
+                for (var i = 0; i < event.task_children.length; i++) {  // 単位時間で分割している場合には, 個々のループを実行
                     for (; j < times.length; j++) {
                         if (event.task_children[i].specified_time[1] <= times[j][0]) {
                             break;
                         }
                         if ((times[j][0] >= event.task_children[i].specified_time[0] && times[j][0] < event.task_children[i].specified_time[1]) ||  // スタートをまたいでいないか?
                             (times[j][1] > event.task_children[i].specified_time[0] && times[j][1] <= event.task_children[i].specified_time[1]) ||  // エンドまたいでいないか?
-                            (times[j][0] <= event.task_children[i].specified_time[0] && times[j][1] >= event.task_children[i].specified_time[1])){ // 元からある予定の間にすっぽり埋もれていないか?
+                            (times[j][0] <= event.task_children[i].specified_time[0] && times[j][1] >= event.task_children[i].specified_time[1])) { // 元からある予定の間にすっぽり埋もれていないか?
                             event.task_children[i].specified_time[0] = times[j][1] + 10 * 60 * 1000;  // 10分の休憩を持たせておく.
                             event.task_children[i].specified_time[1] = event.task_children[i].specified_time[0] + event.task_children[i].required_time;
                         }
@@ -85,20 +62,51 @@ class Schedule{
                     if (event.task_children[i].specified_time[1] > event.task_children[i].deadline) {  // 各タスクの終了時間が締め切りを過ぎていたら
                         console.log("この予定「" + event.task_children[i].name + "」の\n終了時間:" + (new Date(event.task_children[i].specified_time[1])).toString() + "は\n締切時間:" + (new Date(event.task_children[i].deadline)).toString() + "を過ぎてしまいます.");
                         console.log("警告：この予定の追加はやめといたほうがいいよ!");
-                        // this.removeTask(event.task_children[i]);
+                    }
+                    else {  // 締め切りの過ぎていないタスクを追加する
+                        times.splice(i, 0, event.task_children[i].specified_time);
+                        if ((i + 1) < event.task_children.length) {
+                            event.task_children[(i + 1)].specified_time[0] = event.task_children[i].specified_time[1] + 60 * 60 * 1000;  // 60分ごとに行う
+                            event.task_children[(i + 1)].specified_time[1] = event.task_children[(i + 1)].specified_time[0] + event.task_children[(i + 1)].required_time;
+                        }
+                    }
+                    if (j > 0) {
+                        j--;
+                    }
+                }
+            }
+            else {  // 日割りする場合
+                // 一つ目の子タスクを追加
+                event.task_children[0].specified_time[0] = (new Date()).getTime() + 600000;  // 10分余裕を持たせておく
+                event.task_children[0].specified_time[1] = event.task_children[0].specified_time[0] + event.task_children[0].required_time;
+                var j = 0;
+                for (var i = 0; i < event.task_children.length; i++) {  // 各子タスクについて, [day == 1] の時と同様の動作を実行
+                    for (; j < times.length; j++) {
+                        if (event.task_children[i].specified_time[1] <= times[j][0]) {
+                            break;
+                        }
+                        if ((times[j][0] >= event.task_children[i].specified_time[0] && times[j][0] < event.task_children[i].specified_time[1]) ||  // スタートをまたいでいないか?
+                            (times[j][1] > event.task_children[i].specified_time[0] && times[j][1] <= event.task_children[i].specified_time[1]) ||  // エンドまたいでいないか?
+                            (times[j][0] <= event.task_children[i].specified_time[0] && times[j][1] >= event.task_children[i].specified_time[1])) { // 元からある予定の間にすっぽり埋もれていないか?
+                            event.task_children[i].specified_time[0] = times[j][1] + 10 * 60 * 1000;  // 10分の休憩を持たせておく.
+                            event.task_children[i].specified_time[1] = event.task_children[i].specified_time[0] + event.task_children[i].required_time;
+                        }
+                    }
+                    if (event.task_children[i].specified_time[1] > event.task_children[i].deadline) {  // 各タスクの終了時間が締め切りを過ぎていたら
+                        console.log("この予定「" + event.task_children[i].name + "」の\n終了時間:" + (new Date(event.task_children[i].specified_time[1])).toString() + "は\n締切時間:" + (new Date(event.task_children[i].deadline)).toString() + "を過ぎてしまいます.");
+                        console.log("警告：この予定の追加はやめといたほうがいいよ!");
                     }
                     else {  // 締め切りの過ぎていないタスクを追加する
                         times.splice(i, 0, event.task_children[i].specified_time);
                         if ((i + 1) < event.task_children.length) {
                             const tmp = new Date(event.task_children[i].specified_time[1]);
-                            event.task_children[(i + 1)].specified_time[0] = (new Date(tmp.getFullYear(), tmp.getMonth(), (tmp.getDate() + 1), 8).getTime()); //寝る時間等を設定できたら8時になってるところを消してもよい
+                            event.task_children[(i + 1)].specified_time[0] = (new Date(tmp.getFullYear(), tmp.getMonth(), (tmp.getDate() + 1), 8).getTime()); // 寝る時間等を設定できたら8時になってるところを消してもよい
                             event.task_children[(i + 1)].specified_time[1] = event.task_children[(i + 1)].specified_time[0] + event.task_children[(i + 1)].required_time;
                         }
                     }
-                    if(j > 0){
+                    if (j > 0) {
                         j--;
                     }
-                    // console.log(event.task_children[i].name + "\n開始時間:" + (new Date(event.task_children[i].specified_time[0])).toString() + "\n終了時間:" + (new Date(event.task_children[i].specified_time[1])).toString());
                 }
             }
         }
@@ -110,14 +118,14 @@ class Schedule{
      */
     addTask(task) {
         console.log("確認用メッセージ:「" + task.name + "」を追加します.");
-        
+
         // タスクの終了時刻が締め切り時刻を過ぎている場合には, エラー
         if (task.plan_or_task && task.specified_time[1] > task.deadline) {
             console.log("締め切り過ぎてるよ！！！");
         }
 
         // タスクを時系列なTaskに入れる処理
-        if(task.auto_scheduled) {
+        if (task.auto_scheduled) {
             // 自動スケジューリングをする処理 (task_childrenはコンストラクタで更新している → 子タスクがあればtask_childrenに要素が2個以上入っている.)
             this.auto_schedule.push(task);
             this.AutoScheduling();
@@ -125,11 +133,11 @@ class Schedule{
             // 自動スケジューリングをしない処理
             // 入れる予定の時間に重複していなければ入れる
             try {
-                for(var i=0;i<this.on_time.length;i++) {
+                for (var i = 0; i < this.on_time.length; i++) {
                     if ((this.on_time[i].specified_time[0] >= task.specified_time[0] && this.on_time[i].specified_time[0] < task.specified_time[1]) ||  // スタートをまたいでいないか?
                         (this.on_time[i].specified_time[1] > task.specified_time[0] && this.on_time[i].specified_time[1] <= task.specified_time[1]) ||  // エンドまたいでいないか?
                         (this.on_time[i].specified_time[0] <= task.specified_time[0] && this.on_time[i].specified_time[1] >= task.specified_time[1])) {  // 元からある予定の間にすっぽり埋もれていないか?
-                            throw new Error("この予定は追加できません。");
+                        throw new Error("この予定は追加できません。");
                     }
                 }
                 // 重複していないので入れる
@@ -209,16 +217,16 @@ class Schedule{
     removeTask(task) {
         var id = task.id;
         var tasks = [];
-        if(task.auto_scheduled) {
+        if (task.auto_scheduled) {
             tasks = this.auto_schedule;
-        } else if(task.duplicate){
+        } else if (task.duplicate) {
             tasks = this.other;
         } else {
             tasks = this.on_time;
         }
-        for(var i=0; i < tasks.length;i++) {
-            if(tasks[i].id == id) {
-                tasks.splice(i,1);
+        for (var i = 0; i < tasks.length; i++) {
+            if (tasks[i].id == id) {  // 関連するタスク (同じidのタスク) は全て消す.
+                tasks.splice(i, 1);
                 console.log("確認用メッセージ:「" + task.name + "」を削除しました.");
             }
         }
@@ -239,44 +247,53 @@ class Schedule{
 
     // 全ての予定,タスクの表示をするモジュール
     viewAllTasks() {
+        console.log(this.on_time);
         console.log("確認用メッセージ:全ての予定,タスクを表示");
-        for (const events of this.all_tasks) {
+        for (const events of this.returnAllTasks()) {
             console.log(events.name + ":" + (new Date(events.specified_time[0])).toString() + " -> " + (new Date(events.specified_time[1])).toString());
+            //console.log(events);
         }
     }
 
     // all_tasksに全てのtaskを追加するモジュール (ここで, 分割した場合は統合する？) 
     // (子タスクの情報は親タスクから復元可能！ → 親タスクさえデータベースに格納しておいて, autoSchedulingで子タスクを展開すれば問題ない.)
-    returnAllTasks(){
+    returnAllTasks() {
         var i = 0;
         var j = 0;
         var all_tasks = [];
-        while (i < this.on_time.length || j < this.auto_schedule.length) {
-            if (i >= this.on_time.length) {
-                all_tasks.push(this.auto_schedule[j]);
-                j++;
-            }
-            else if (j >= this.auto_schedule.length) {
-                all_tasks.push(this.on_time[i]);
-                i++;
-            }
-            else {
-                if (this.on_time[i].specified_time[0] > this.auto_schedule[j].specified_time[0]) {
-                    all_tasks.push(this.auto_schedule[j]);
-                    j++;
-                } else {
-                    all_tasks.push(this.on_time[i]);
-                    i++;
+        for (var task of this.on_time) {
+            if (task.task_children.length > 0) {
+                console.log("Nonnull");
+                for (var child of task.task_children) {
+                    all_tasks.push(child);
                 }
             }
+            else {
+                console.log("null");
+                all_tasks.push(task);
+            }
         }
-        for (i = 0; i < this.other.length; i++){
-            all_tasks.push(this.other[i]);
+        for (var task of this.auto_schedule) {
+            if (task.task_children.length > 0) {
+                for (var child of task.task_children) {
+                    all_tasks.push(child);
+                }
+            }
+            else {
+                all_tasks.push(task);
+            }
         }
-        // console.log("確認用メッセージ:全ての予定を表示");
-        // for (const events of all_tasks) {
-        //     console.log("タスク名:" + events.name + "\n開始時間:" + (new Date(events.specified_time[0])).toString() + "\n終了時間:" + (new Date(events.specified_time[1])).toString() + "\n締切時間:" + (new Date(events.deadline)).toString());
-        // }
+        for (var task of this.other) {
+            if (task.task_children.length > 0) {
+                for (var child of task.task_children) {
+                    all_tasks.push(child);
+                }
+            }
+            else {
+                all_tasks.push(task);
+            }
+        }
+
         return all_tasks;
     }
 }
@@ -285,22 +302,183 @@ var myLifestyle = new Schedule([], [], []);
 var mySchedule = new Schedule([], [], []);
 var mySettings = new Settings();
 
-var user1 = new User(2123, "山田太郎", "yamada.taro@gmail.com", myLifestyle, mySchedule, mySettings);
-// constructor(id, name, category, overview, favorite, plan_or_task, finished, duplicate, deadline, required_time, days, auto_scheduled, specified_time)
-var task1 = new Task(123, "デザイン開発", "課題", "Webページのデザインを開発せねば〜", false, false, false, false, (new Date(2022, 11, 24, 18, 20)).getTime(), 4, 3, true, null);
-var task2 = new Task(101, "情報線形代数レポート課題", "課題", "早く早く終わりたい！！", false, false, false, false, (new Date(2022, 11, 24, 19, 0)).getTime(), 1, 1, false, [[(new Date(2022, 11, 17, 0, 0)).getTime(), (new Date(2022, 11, 17, 2, 0)).getTime()]]);
-var task3 = new Task(100, "デザイン課題", "課題", "デザインの授業の課題！！！！！！！", false, false, false, false, (new Date(2022, 11, 25, 18, 0)).getTime(), null, 1, false, [[(new Date(2022, 11, 24, 8, 20)).getTime(), (new Date(2022, 11, 24, 9, 20)).getTime()]]);
-var task4 = new Task(142, "情報英語発展", "課題", "英語で書かれた情報の専門誌を和訳する", false, false, false, false, (new Date(2022, 11, 16, 18, 30)).getTime(), 3, 1, true, null);
-// var task5 = new Task(182, "ドイツ語基礎", "課題", "ドイツ語で会話をしてみよう", false, false, false, false, (new Date(2022, 11, 14, 18, 30)).getTime(), 3, 1, true, null);
+var task0Info = {
+    id: 1,
+    name: "デザイン開発",
+    category: "課題",
+    overview: "Webページのデザインを開発せねば〜",
+    favorite: false,
+    plan_or_task: false,
+    finished: false,
+    duplicate: false,
+    deadline: (new Date(2023, 11, 24, 18, 20)).getTime(),
+    required_time: 5,
+    days: 1,
+    auto_scheduled: true,
+    specified_time: null,
+    unit_time: 10,
+    repeat_unit: "?",
+    importance: 1,
+    place: "?",
+    color: "black",
+    valid: true
+}
 
-user1.schedule.addTask(task1);
-user1.schedule.addTask(task2);
-user1.schedule.addTask(task3);
-user1.schedule.editTask(task2,task4);
+var task1Info = {
+    id: 2,
+    name: "情報線形代数レポート課題",
+    category: "課題",
+    overview: "早く早く終わりたい！！",
+    favorite: false,
+    plan_or_task: false,
+    finished: false,
+    duplicate: false,
+    deadline: (new Date(2023, 11, 24, 19, 0)).getTime(),
+    required_time: null,
+    days: 1,
+    auto_scheduled: false,
+    specified_time: [[(new Date(2022, 11, 17, 0, 0)).getTime(), (new Date(2022, 11, 17, 3, 0)).getTime()]],
+    unit_time: 0.5,
+    repeat_unit: "?",
+    importance: 1,
+    place: "?",
+    color: "black",
+    valid: true
+}
+
+var task2Info = {
+    id: 3,
+    name: "デザイン課題",
+    category: "課題",
+    overview: "デザインの授業の課題！！！！！！！",
+    favorite: false,
+    plan_or_task: false,
+    finished: false,
+    duplicate: false,
+    deadline: (new Date(2023, 11, 25, 18, 0)).getTime(),
+    required_time: null,
+    days: 1,
+    auto_scheduled: false,
+    specified_time: [[(new Date(2022, 11, 24, 8, 40)).getTime(), (new Date(2022, 11, 24, 9, 55)).getTime()], [(new Date(2022, 11, 24, 15, 00)).getTime(), (new Date(2022, 11, 24, 16, 30)).getTime()]],
+    unit_time: 1,
+    repeat_unit: "?",
+    importance: 1,
+    place: "?",
+    color: "black",
+    valid: true
+}
+
+var task3Info = {
+    id: 4,
+    name: "情報英語発展",
+    category: "課題",
+    overview: "英語で書かれた情報の専門誌を和訳する",
+    favorite: false,
+    plan_or_task: false,
+    finished: false,
+    duplicate: false,
+    deadline: (new Date(2022, 11, 16, 18, 30)).getTime(),
+    required_time: 3,
+    days: 1,
+    auto_scheduled: true,
+    specified_time: null,
+    unit_time: 0.5,
+    repeat_unit: "?",
+    importance: 1,
+    place: "?",
+    color: "black",
+    valid: true
+}
+
+var task4Info = {
+    id: 5,
+    name: "情報英語発展",
+    category: "課題",
+    overview: "英語で書かれた情報の専門誌を和訳する",
+    favorite: false,
+    plan_or_task: false,
+    finished: false,
+    duplicate: false,
+    deadline: (new Date(2023, 11, 16, 18, 30)).getTime(),
+    required_time: 3,
+    days: 1,
+    auto_scheduled: true,
+    specified_time: null,
+    unit_time: 0.5,
+    repeat_unit: "?",
+    importance: 1,
+    place: "?",
+    color: "black",
+    valid: true
+}
+
+var task5Info = {
+    id: 6,
+    name: "ドイツ語基礎",
+    category: "課題",
+    overview: "ドイツ語で会話をしてみよう",
+    favorite: false,
+    plan_or_task: false,
+    finished: false,
+    duplicate: false,
+    deadline: (new Date(2023, 11, 14, 18, 30)).getTime(),
+    required_time: 3,
+    days: 3,
+    auto_scheduled: true,
+    specified_time: null,
+    unit_time: 1 / 3,
+    repeat_unit: "?",
+    importance: 1,
+    place: "?",
+    color: "black",
+    valid: true
+}
+
+var task6Info = {
+    id: 6,
+    name: "ドイツ語発展",
+    category: "課題",
+    overview: "ドイツ語で文章を書いてみましょう",
+    favorite: false,
+    plan_or_task: false,
+    finished: false,
+    duplicate: false,
+    deadline: (new Date(2023, 11, 14, 18, 30)).getTime(),
+    required_time: 5,
+    days: 3,
+    auto_scheduled: true,
+    specified_time: null,
+    unit_time: 1 / 3,
+    repeat_unit: "?",
+    importance: 1,
+    place: "?",
+    color: "black",
+    valid: true
+}
+
+var tasksInfo = [task0Info, task1Info, task2Info, task3Info, task4Info, task5Info, task6Info];
+var tasks = [];
+
+var user1 = new User(2123, "山田太郎", "yamada.taro@gmail.com", myLifestyle, mySchedule, mySettings);
+// constructor(id, name, category, overview, favorite, plan_or_task, finished, duplicate, deadline, required_time, days, auto_scheduled, specified_time, unit_time, repeat_unit, importance, place, color, valid)
+for (var i = 0; i < tasksInfo.length; i++) {
+    var task = new Task(tasksInfo[i].id, tasksInfo[i].name, tasksInfo[i].category, tasksInfo[i].overview, tasksInfo[i].favorite, tasksInfo[i].plan_or_task, tasksInfo[i].finished, tasksInfo[i].duplicate, tasksInfo[i].deadline, tasksInfo[i].required_time, tasksInfo[i].days, tasksInfo[i].auto_scheduled, tasksInfo[i].specified_time, tasksInfo[i].unit_time, tasksInfo[i].repeat_unit, tasksInfo[i].importance, tasksInfo[i].place, tasksInfo[i].color, tasksInfo[i].valid);
+    tasks.push(task);
+}
+
+user1.schedule.addTask(tasks[0]);  // required_time < unit_time のケース
+user1.schedule.addTask(tasks[1]);  // 指定時間が1箇所のケース
+user1.schedule.addTask(tasks[2]);  // 指定時間が2箇所（例：1時限と5時限の授業を受ける）のケース
+// user1.schedule.addTask(tasks[3]); // (締め切り過ぎる場合, 上手くいかない...(分割しても, 開始時間が全て同じになってしまう.)) 
+user1.schedule.addTask(tasks[4]);  // 単位時間ごとに区切る
+user1.schedule.addTask(tasks[5]);  // 日割り
+
+// user1.schedule.editTask(tasks[1], tasks[3]);  // 変更 (締め切り時間が過ぎるタスクを入れた場合)
+user1.schedule.editTask(tasks[5], tasks[6]);  // 変更 (締め切り時間が過ぎないタスクを入れた場合)
 
 // カテゴリに毎年/毎月/毎週/平日/週末/毎日を設定する？
-var plan1 = new Task(199, "睡眠時間", "生活", "いい夢みたい!!!!", true, true, false, false, null, 8, 1, false, [[(new Date(2022, 11, 24, 0, 0)).getTime(), (new Date(2022, 11, 24, 8, 0)).getTime()]]);
+// var plan1 = new Task(199, "睡眠時間", "生活", "いい夢みたい!!!!", true, true, false, false, null, 8, 1, false, [[(new Date(2023, 11, 24, 0, 0)).getTime(), (new Date(2023, 11, 24, 8, 0)).getTime()]], 20, 1, 1, "?", "dark", true);
 
-user1.lifestyle.addTask(plan1);
+//user1.lifestyle.addTask(plan1);
 
 user1.schedule.viewAllTasks();
