@@ -1,8 +1,8 @@
 import { all_tasks } from "./get_tasks.js";
 
-import { Schedule } from "./class_Schedule.js";
-import { Settings } from "./class_Settings.js";
-import { User } from "./class_User.js";
+// import { Schedule } from "./class_Schedule.js";
+// import { Settings } from "./class_Settings.js";
+// import { User } from "./class_User.js";
 
 let myLifestyle = new Schedule([], [], []);
 let mySchedule = new Schedule([], [], []);

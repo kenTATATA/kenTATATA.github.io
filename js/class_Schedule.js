@@ -1,6 +1,6 @@
 // import {Task} from '../js/class_Task.js';
 
-export class Schedule {
+class Schedule {
   constructor(auto_schedule, on_time, other) {
     // データベースに元々格納してあるデータを持ってくる.
     this.auto_schedule = auto_schedule; //自動スケジューリングするTask

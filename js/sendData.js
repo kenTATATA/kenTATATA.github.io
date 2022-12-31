@@ -1,15 +1,3 @@
-import { app } from "./firebase_config.js";
-
-import {
-  collection,
-  getDocs,
-  getDoc,
-  getDocFromCache,
-  setDoc,
-  doc,
-  getFirestore,
-} from "https://www.gstatic.com/firebasejs/9.0.1/firebase-firestore.js";
-
 /**
  * 現段階でのtodo
  * それぞれの関数にコメントつける

@@ -1,4 +1,4 @@
-export class User {
+class User {
   /**
    * @param {String} name :ユーザー名
    * @param {Schedule} lifestyle :定例スケジュール
