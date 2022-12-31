@@ -18,7 +18,7 @@ const docsnap = await getDoc(userRef);
 const test_add_btn = document.getElementById("test_add");
 
 // document.getElementById("time").innerHTML = docsnap.data().予定;
-// document.getElementById("schedule").innerHTML = docsnap.data().時間;
+// document.getElementById("schedule").innerHTML = docs nap.data().時間;
 
 test_add_btn.addEventListener("click", function () {
   console.log("hi");

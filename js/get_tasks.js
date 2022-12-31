@@ -11,7 +11,9 @@ import { Task } from "./task.js";
 
 const user_id = localStorage.getItem("uid");
 const db = getFirestore(app);
-const userRef = doc(db, "userData", user_id);
+
+let uid = "testuid_getData";
+const userRef = doc(db, "userData", uid);
 const docsnap = await getDoc(userRef);
 
 console.log(docsnap.data()[Object.keys(docsnap.data())[1]]);
