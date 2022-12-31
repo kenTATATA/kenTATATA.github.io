@@ -1,8 +1,7 @@
-// なぜか他の関数が使えなくなる
-// import { Task } from '../js/class_Task.js';
-// import { User } from '../js/class_User.js';
-// import { Schedule } from '../js/class_Schedule.js';
-// import { Settings } from '../js/class_Settings.js';
+import { Task } from '../js/class_Task.js';
+import { User } from '../js/class_User.js';
+import { Schedule } from '../js/class_Schedule.js';
+import { Settings } from '../js/class_Settings.js';
 
 //(KIM)ユーザー情報を取得
 //////////////////////////////////////////////////////////////////////
@@ -57,8 +56,9 @@ document.getElementById('submit__btn').addEventListener('click', function () {
 })
 
 //フォームチェック：入力内容に問題があればfalseを出力、メッセージを表示
+var error_number = 0;
 function form_check(task) {
-    error_messages_container = document.getElementById('error_messages_container');
+    var error_messages_container = document.getElementById('error_messages_container');
     error_messages_container.innerHTML = "";
     error_number = 0;
     var present_time = new Date();
@@ -160,6 +160,7 @@ function error_message(message) {
 
 
 //フォームの動的化：タスクか予定か
+document.getElementById('plan_or_task').onchange = Plan_or_Task;
 function Plan_or_Task() {
     if (document.getElementById("plan_or_task")) {
         var Plan_or_Task = document.getElementById("plan_or_task").value;
@@ -180,17 +181,19 @@ function Plan_or_Task() {
 }
 
 //フォームの動的化：AutoSchedulingがオンのときにフォームを消す
+document.getElementById('auto_scheduling').onchange = AutoScheduling;
 function AutoScheduling() {
     if (document.getElementById("auto_scheduling").checked === true) {
-        document.getElementById("number_of_imp_days").setAttribute("onchange", "");
+        document.getElementById('number_of_imp_days').onchange = "";
         document.getElementById('imp_date__form--container').innerHTML = "";
     } else {
-        document.getElementById("number_of_imp_days").setAttribute("onchange", "CreatingForm();");
+        document.getElementById('number_of_imp_days').onchange = CreatingForm;
         CreatingForm();
     }
 }
 
 //フォームの動的化：number_of_imp_days分だけフォームを作成
+document.getElementById('number_of_imp_days').onchange = CreatingForm;
 function CreatingForm() {
     var n = Number(document.getElementById("number_of_imp_days").value);
     document.getElementById('imp_date__form--container').innerHTML = "";
