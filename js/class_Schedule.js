@@ -1,6 +1,6 @@
-// import {Task} from '../js/class_Task.js';
+import { Task } from "../js/class_Task.js";
 
-class Schedule {
+export class Schedule {
   constructor(auto_schedule, on_time, other) {
     // データベースに元々格納してあるデータを持ってくる.
     this.auto_schedule = auto_schedule; //自動スケジューリングするTask
@@ -12,7 +12,6 @@ class Schedule {
     if (this.auto_schedule.length == 0) {
       return;
     }
-
     // 動くかわからんので、とりあえず確認用
     //締め切り順でソート
     this.auto_schedule.sort(function (a, b) {

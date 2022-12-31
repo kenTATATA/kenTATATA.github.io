@@ -15,7 +15,7 @@
                 <h3>新規予定・タスク作成</h3>
                 <div class="add_task--button"><a href="index.html">キャンセル</a></div>
                 種類：
-                <select name="plan_or_task" id="plan_or_task" onchange="Plan_or_Task();">
+                <select name="plan_or_task" id="plan_or_task">
                     <option value="Plan">予定</option>
                     <option value="Task">タスク</option>
                 </select>
@@ -210,14 +210,13 @@
                 <div class="add_task__item">
                     <p>実施予定日</p>
                     <div id="auto_scheduling_form" style="display: none;">
-                        <input type="checkbox" value="auto_scheduling" id="auto_scheduling" name="auto_scheduling"
-                            onchange="AutoScheduling();" />自動でスケジューリングする
+                        <input type="checkbox" value="auto_scheduling" id="auto_scheduling"
+                            name="auto_scheduling" />自動でスケジューリングする
                     </div>
                     <input type="checkbox" value="task_duplication" name="task_duplication" />タスクの重複を許す
                     <br>
                     実施日数：
-                    <input name="number_of_imp_days" id="number_of_imp_days" type="number" value="1" min="1"
-                        onchange="CreatingForm();"></input>
+                    <input name="number_of_imp_days" id="number_of_imp_days" type="number" value="1" min="1"></input>
                     <br>
                     <div id="imp_date__form--container">
                         <div name="imp_date__form_1">
@@ -428,16 +427,7 @@
         </div>
     </div>
 
-    <button id="test_add">testadd</button>
-
-    <!-- importできても他の関数が使えなくなる。 -->
-    <!-- <script type="module" src="../js/add_task.js"></script> -->
-    <script type="text/javascript" src="../js/class_Settings.js"></script>
-    <script type="text/javascript" src="../js/class_Task.js"></script>
-    <script type="text/javascript" src="../js/class_User.js"></script>
-    <script type="text/javascript" src="../js/class_Schedule.js"></script>
     <script type="module" src="../js/add_task.js"></script>
-    <script type="module" src="../js/data_send.js"></script>
 
 </body>
 

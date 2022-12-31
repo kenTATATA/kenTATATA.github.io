@@ -1,3 +1,3 @@
-class Settings {
+export class Settings {
   constructor() {}
 }
