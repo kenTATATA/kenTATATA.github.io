@@ -2,6 +2,8 @@ import { Task } from "../js/class_Task.js";
 import { User } from "../js/class_User.js";
 import { Schedule } from "../js/class_Schedule.js";
 import { Settings } from "../js/class_Settings.js";
+import { firebase_send } from "./data_send.js";
+import { all_tasks } from "./get_tasks.js";
 
 //(KIM)ユーザー情報を取得
 //////////////////////////////////////////////////////////////////////
@@ -119,6 +121,7 @@ document.getElementById("submit__btn").addEventListener("click", function () {
   //(KIM)Scheduleクラスのall_tasksのタスクをデータベースに格納
   all_tasks = user.schedule.returnAllTasks();
   console.log(all_tasks);
+  firebase_send(all_tasks);
 
   //トップページに戻る
   //トップページでデータベースからタスクを取得
