@@ -24,15 +24,15 @@ header p {
 }
 
 header button {
-    margin-left: 10px;
+    margin-left: 20px;
     background-color: white;
     color: white;
-    border: solid 2px #66A1FF;
+    border: solid 1px #66A1FF;
     cursor: pointer;
     outline: none;
     appearance: none;
     border-radius: 2px;
-    padding: 5px 15px;
+    padding: 4px 13px;
 }
 
 header button a {
@@ -42,4 +42,41 @@ header button a {
 
 .main_content {
     padding: 25px 30px;
+}
+
+.add_task_link {
+    text-decoration: none;
+}
+
+.add_task_link img {
+    vertical-align: middle;
+    width: 32px;
+}
+
+.add_task_link p {
+    display: inline-block;
+    vertical-align: middle;
+    color: #66A1FF;
+}
+
+.task_container {
+    cursor: pointer;
+    background-color:#E0EDFF;
+    width: 80%;
+    padding: 16px 25px;
+    margin-top: 10px;
+    border-radius: 8px;
+}
+
+.task_container h5 {
+    cursor: pointer;
+    font-size: 15px;
+    font-weight:500;
+    margin: 0 0 5px 0;
+}
+
+.task_container p{
+    margin:0;
+    font-size: 11px;
+    color: #A6A6A6;
 }

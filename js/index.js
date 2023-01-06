@@ -106,18 +106,20 @@ var i = 0;
 for (const task of all_tasks) {
   i++;
   var task_container = document.createElement("div");
-  task_container.setAttribute("name", "task_" + String(i));
+  task_container.setAttribute("id",task.id.toString());
+  task_container.classList.add("task_container");
   task_container.innerHTML = `
         <h5>${task.name}</h5>
             `;
   for (const time of task.specified_time) {
     task_container.innerHTML += `
-        ${time[0]} -> ${time[1]}<br>
+        <p>実施日：${time[0]} -> ${time[1]}</p>
             `;
   }
   task_container.innerHTML += `
-        <button type="button" id="${task.id}">詳細</button>
-            `;
+       <p>締切日：${task.deadline}</p>
+       `;
+
 
   document.getElementById("task_list_container").appendChild(task_container);
 }

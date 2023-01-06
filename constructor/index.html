@@ -14,24 +14,17 @@
     <header>
         <h1>AutoCalender</h1>
         <p id="name" class="header_item_right"></p>
-        <button id="logout_btn" class="header_item_right"><a href="login.html">Logout</a></button>
+        <button id="logout_btn" class="header_item_right"><a href="login.html">ログアウト</a></button>
     </header>
 
     <div class="main_content">
         <div class="add_task_container">
             <a href="add_task.html" class="add_task_link">
-                <img class="add_task_icon" src="../img/plus.png" />
-                <p class="add_task_text">タスクを追加</span>
+                <img src="../img/plus.png" />
+                <p>タスクを追加</p>
             </a>
         </div>
-        <div class="task_list">
-            <h3>タスク一覧</h3>
-            <div id="task_list_container"></div>
-        </div>
-        <div class="done_task_list">
-            <h3>完了済み</h3>
-            <div id="finished_task_list_container"></div>
-        </div>
+        <div id="task_list_container"></div>
     </div>
 </body>
 
