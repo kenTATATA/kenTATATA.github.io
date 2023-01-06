@@ -32,21 +32,21 @@ document.getElementById("submit__btn").addEventListener("click", function () {
   //(KIM)データベースから他のタスクを取得し、Taskクラスの変換してScheduleクラスに格納
   //////////////////////////////////////////////////////////////////////
   //(仮)ローカルに最初から入っているタスクを作成しScheduleクラスに格納
-  var task1 = new Task(
-    123,
-    "デザイン開発",
-    "課題",
-    "Webページのデザインを開発せねば〜",
-    false,
-    false,
-    false,
-    false,
-    new Date(1668417600000).getTime(),
-    3,
-    1,
-    true,
-    [[0, 0]]
-  );
+  // var task1 = new Task(
+  //   123,
+  //   "デザイン開発",
+  //   "課題",
+  //   "Webページのデザインを開発せねば〜",
+  //   false,
+  //   false,
+  //   false,
+  //   false,
+  //   new Date(1668417600000).getTime(),
+  //   3,
+  //   1,
+  //   true,
+  //   [[0, 0]]
+  // );
   // var task2 = new Task(
   //   101,
   //   "情報線形代数レポート課題",
@@ -462,6 +462,7 @@ function CreatingForm() {
 
 // 新しいタスクのデータをフォームから取得し、Taskクラスの形で返す関数
 function get_new_task() {
+  let new_specified_time = [[0, 0]];
   const formElements = document.forms.add_task__form;
   var a = {};
 
@@ -498,12 +499,11 @@ function get_new_task() {
   } else {
     var deadline_date = new Date(
       a["deadline_date"] + " " + a["deadline_hour"] + ":" + a["deadline_minute"]
-    ).getTime();
+    );
     var required_time =
       new Number(a["len_hour"]) + new Number(a["len_minute"]) / 60;
   }
 
-  var specified_time = [];
   if (a["auto_scheduling"] == false) {
     for (var i = 1; i < Number(a["number_of_imp_days"]) + 1; i++) {
       var imp_start_date = new Date(
@@ -520,12 +520,11 @@ function get_new_task() {
           ":" +
           a["imp_end_minute_" + String(i)]
       );
-      specified_time.push([imp_start_date, imp_end_date]);
+      new_specified_time.push([imp_start_date, imp_end_date]);
     }
-  } else {
-    specified_time.push([null, null]);
   }
-  var new_task = new Task(
+  console.log(new_specified_time);
+  const new_task = new Task(
     uuidv4(),
     a["title"],
     a["category"],
@@ -538,9 +537,10 @@ function get_new_task() {
     required_time,
     Number(a["number_of_imp_days"]),
     a["auto_scheduling"],
-    specified_time
+    (new_specified_time = [[4, 3]])
   );
 
+  console.log(new_specified_time);
   console.log(a);
   return new_task;
 }

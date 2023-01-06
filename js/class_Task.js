@@ -92,11 +92,11 @@ export class Task {
   }
 
   get getStartTime() {
-    return this.specified_time[0];
+    return this.specified_time[0][0];
   }
 
   get getEndTime() {
-    return this.specified_time[1];
+    return this.specified_time[0][1];
   }
 
   /**
