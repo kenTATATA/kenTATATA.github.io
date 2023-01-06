@@ -6,7 +6,7 @@ import {
 
 const auth = getAuth(app);
 const name_space = document.getElementById("name");
-const email_space = document.getElementById("email");
+// const email_space = document.getElementById("email");
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -17,7 +17,7 @@ onAuthStateChanged(auth, (user) => {
     console.log(name);
     console.log(uid);
     name_space.innerText = name;
-    email_space.innerText = email;
+    // email_space.innerText = email;
     localStorage.setItem("uid", uid);
     localStorage.setItem("email", email);
     localStorage.setItem("name", name);
