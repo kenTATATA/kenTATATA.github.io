@@ -28,8 +28,7 @@ export function firebase_send(AllTask) {
   let docData = {};
   AllTask.forEach((e) => {
     console.log(AllTask);
-    const dataId = uuidv4();
-    (docData[dataId] = [
+    (docData[e.id] = [
       e.id,
       e.name,
       e.category,
@@ -42,8 +41,8 @@ export function firebase_send(AllTask) {
       e.required_time,
       e.days,
       e.auto_scheduled,
-      e.specified_time[0][0],
-      e.specified_time[0][1],
+      e.specified_time[0],
+      e.specified_time[1],
     ]),
       setDoc(doc(db, "userData", user_id), docData);
     console.log(e);

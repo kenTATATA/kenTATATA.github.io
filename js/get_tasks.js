@@ -13,10 +13,10 @@ const user_id = localStorage.getItem("uid");
 const db = getFirestore(app);
 
 let uid = "testuid_getData";
-const userRef = doc(db, "userData", uid);
+const userRef = doc(db, "userData", user_id);
 const docsnap = await getDoc(userRef);
 
-console.log(docsnap.data()[Object.keys(docsnap.data())[1]]);
+// console.log(docsnap.data()[Object.keys(docsnap.data())[1]]);
 // console.log([Object.keys(docsnap.data())[1]]);
 
 export let all_tasks = [];
@@ -36,8 +36,8 @@ for (let i = 0; i < Object.keys(docsnap.data()).length; i++) {
     data[9],
     data[10],
     data[11],
-    [[data[12].seconds * 1000, data[13].seconds * 1000]]
+    [[data[12], data[13]]]
   );
   all_tasks.push(task);
-  console.log(docsnap.data()[Object.keys(docsnap.data())[i]]);
+  // console.log(docsnap.data()[Object.keys(docsnap.data())[i]]);
 }
