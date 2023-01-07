@@ -67,37 +67,3 @@ export function firebase_send(AllTask) {
     console.log(e);
   });
 }
-
-test_add_btn.addEventListener(
-  "click",
-  function () {
-    firebase_send(all_tasks);
-  }
-
-  // console.log("hi")
-  // function () {
-  // let docData = {};
-  // all_tasks.forEach((e) => {
-  //   console.log(all_tasks);
-  //   const dataId = uuidv4();
-  //   (docData[dataId] = [
-  //     e.id,
-  //     e.name,
-  //     e.category,
-  //     e.overview,
-  //     e.favorite,
-  //     e.plan_or_task,
-  //     e.finished,
-  //     e.duplicate,
-  //     e.deadline,
-  //     e.required_time,
-  //     e.days,
-  //     e.auto_scheduled,
-  //     e.specified_time[0][0],
-  //     e.specified_time[0][1],
-  //   ]),
-  //     setDoc(doc(db, "userData", user_id), docData);
-  //   console.log(e);
-  // });
-  // }
-);

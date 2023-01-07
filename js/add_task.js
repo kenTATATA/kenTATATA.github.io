@@ -29,94 +29,6 @@ document.getElementById("submit__btn").addEventListener("click", function () {
   //Scheduleクラスに格納
   user.schedule.addTask(new_task);
 
-  //(KIM)データベースから他のタスクを取得し、Taskクラスの変換してScheduleクラスに格納
-  //////////////////////////////////////////////////////////////////////
-  //(仮)ローカルに最初から入っているタスクを作成しScheduleクラスに格納
-  // var task1 = new Task(
-  //   123,
-  //   "デザイン開発",
-  //   "課題",
-  //   "Webページのデザインを開発せねば〜",
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   new Date(1668417600000).getTime(),
-  //   3,
-  //   1,
-  //   true,
-  //   [[0, 0]]
-  // );
-  // var task2 = new Task(
-  //   101,
-  //   "情報線形代数レポート課題",
-  //   "課題",
-  //   "早く早く終わりたい！！",
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   new Date(1668417600000),
-  //   1,
-  //   1,
-  //   true,
-  //   [[0, 0]]
-  // );
-  // var task3 = new Task(
-  //   100,
-  //   "デザイン課題",
-  //   "課題",
-  //   "デザインの授業の課題！！！！！！！",
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   new Date(2023, 11, 14, 18, 0),
-  //   null,
-  //   1,
-  //   false,
-  //   [[new Date(1668417600000), new Date(1668417600000)]]
-  // );
-  // var task4 = new Task(
-  //   142,
-  //   "情報英語発展",
-  //   "課題",
-  //   "英語で書かれた情報の専門誌を和訳する",
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   new Date(1668417600000),
-  //   3,
-  //   1,
-  //   true,
-  //   [[0, 0]]
-  // );
-  // var task5 = new Task(
-  //   182,
-  //   "ドイツ語基礎",
-  //   "課題",
-  //   "ドイツ語で会話をしてみよう",
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   new Date(1668417600000),
-  //   3,
-  //   1,
-  //   true,
-  //   [[0, 0]]
-  // );
-  // user.schedule.addTask(task1);
-  all_tasks.forEach((e) => {
-    user.schedule.addTask(e);
-  });
-  // user.schedule.addTask(task2);
-  // user.schedule.addTask(task3);
-  // user.schedule.addTask(task4);
-  // user.schedule.addTask(task5);
-  //////////////////////////////////////////////////////////////////////
-
   //(KIM)Scheduleクラスのall_tasksのタスクをデータベースに格納
   let updated_tasks = user.schedule.returnAllTasks();
   console.log(updated_tasks);
@@ -124,7 +36,7 @@ document.getElementById("submit__btn").addEventListener("click", function () {
   //トップページに戻る
   //トップページでデータベースからタスクを取得
   //トップページでタスクを表示
-  // window.location.href = '../constructor/index.html';
+  window.location.href = '../constructor/index.html';
 });
 
 //フォームチェック：入力内容に問題があればfalseを出力、メッセージを表示
