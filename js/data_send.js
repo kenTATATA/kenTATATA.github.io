@@ -42,9 +42,11 @@ export function firebase_send(AllTask) {
         e.required_time,
         e.days,
         e.auto_scheduled,
-        e.specified_time[0][0],
-        e.specified_time[0][1],
       ];
+      for (let i = 0; i < e.specified_time.length; i++) {
+        docData[e.id].push(e.specified_time[i][0]);
+        docData[e.id].push(e.specified_time[i][1]);
+      }
     } else {
       docData[e.id] = [
         e.id,
@@ -62,6 +64,10 @@ export function firebase_send(AllTask) {
         new Date(e.specified_time[0]),
         new Date(e.specified_time[1]),
       ];
+      for (let i = 0; i < e.specified_time.length; i + 2) {
+        docData[e.id].push(e.specified_time[i]);
+        docData[e.id].push(e.specified_time[i++]);
+      }
     }
     setDoc(doc(db, "userData", user_id), docData);
     console.log(e);
