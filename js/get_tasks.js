@@ -22,7 +22,6 @@ const docsnap = await getDoc(userRef);
 export let all_tasks = [];
 
 if (docsnap.data() != null) {
-
   for (let i = 0; i < Object.keys(docsnap.data()).length; i++) {
     let data = docsnap.data()[Object.keys(docsnap.data())[i]];
     let task;
@@ -33,7 +32,10 @@ if (docsnap.data() != null) {
     let for_times = (data.length - number_of_parameter) / 2;
     let arr_specified_time = [];
     for (let i = 0; i < for_times; i++) {
-      arr_specified_time.push([data[number_of_parameter + i * 2], data[number_of_parameter + i * 2 + 1]]);
+      arr_specified_time.push([
+        data[number_of_parameter + i * 2],
+        data[number_of_parameter + i * 2 + 1],
+      ]);
     }
     if (data[8] == null) {
       task = new Task(
@@ -61,7 +63,7 @@ if (docsnap.data() != null) {
         data[5],
         data[6],
         data[7],
-        data[8].toDate(),
+        data[8].seconds * 1000,
         data[9],
         data[10],
         data[11],
