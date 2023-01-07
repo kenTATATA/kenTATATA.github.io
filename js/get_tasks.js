@@ -26,6 +26,7 @@ if (docsnap.data() != null)  {
   for (let i = 0; i < Object.keys(docsnap.data()).length; i++) {
     let data = docsnap.data()[Object.keys(docsnap.data())[i]];
     let task;
+    
     if (data[8] == null) {
       task = new Task(
         data[0],
@@ -52,7 +53,7 @@ if (docsnap.data() != null)  {
         data[5],
         data[6],
         data[7],
-        data[8].seconds * 1000,
+        data[8].toDate(),
         data[9],
         data[10],
         data[11],
