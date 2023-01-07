@@ -28,23 +28,42 @@ export function firebase_send(AllTask) {
   let docData = {};
   AllTask.forEach((e) => {
     console.log(AllTask);
-    (docData[e.id] = [
-      e.id,
-      e.name,
-      e.category,
-      e.overview,
-      e.favorite,
-      e.plan_or_task,
-      e.finished,
-      e.duplicate,
-      e.deadline,
-      e.required_time,
-      e.days,
-      e.auto_scheduled,
-      e.specified_time[0][0],
-      e.specified_time[0][1],
-    ]),
-      setDoc(doc(db, "userData", user_id), docData);
+    if (e.auto_scheduled == false) {
+      docData[e.id] = [
+        e.id,
+        e.name,
+        e.category,
+        e.overview,
+        e.favorite,
+        e.plan_or_task,
+        e.finished,
+        e.duplicate,
+        e.deadline,
+        e.required_time,
+        e.days,
+        e.auto_scheduled,
+        e.specified_time[0][0],
+        e.specified_time[0][1],
+      ];
+    } else {
+      docData[e.id] = [
+        e.id,
+        e.name,
+        e.category,
+        e.overview,
+        e.favorite,
+        e.plan_or_task,
+        e.finished,
+        e.duplicate,
+        e.deadline,
+        e.required_time,
+        e.days,
+        e.auto_scheduled,
+        null,
+        null,
+      ];
+    }
+    setDoc(doc(db, "userData", user_id), docData);
     console.log(e);
   });
 }

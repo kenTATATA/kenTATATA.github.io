@@ -462,7 +462,6 @@ function CreatingForm() {
 
 // 新しいタスクのデータをフォームから取得し、Taskクラスの形で返す関数
 function get_new_task() {
-  let new_specified_time = [[0, 0]];
   const formElements = document.forms.add_task__form;
   var a = {};
 
@@ -504,7 +503,9 @@ function get_new_task() {
       new Number(a["len_hour"]) + new Number(a["len_minute"]) / 60;
   }
 
+  let new_specified_time = [[0, 0]];
   if (a["auto_scheduling"] == false) {
+    new_specified_time = [];
     for (var i = 1; i < Number(a["number_of_imp_days"]) + 1; i++) {
       var imp_start_date = new Date(
         a["imp_date_" + String(i)] +
@@ -524,6 +525,7 @@ function get_new_task() {
     }
   }
   console.log(new_specified_time);
+
   const new_task = new Task(
     uuidv4(),
     a["title"],
@@ -537,7 +539,7 @@ function get_new_task() {
     required_time,
     Number(a["number_of_imp_days"]),
     a["auto_scheduling"],
-    (new_specified_time = [[4, 3]])
+    new_specified_time
   );
 
   console.log(new_specified_time);
