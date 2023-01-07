@@ -59,8 +59,8 @@ export function firebase_send(AllTask) {
         e.required_time,
         e.days,
         e.auto_scheduled,
-        null,
-        null,
+        new Date(e.specified_time[0]),
+        new Date(e.specified_time[1]),
       ];
     }
     setDoc(doc(db, "userData", user_id), docData);

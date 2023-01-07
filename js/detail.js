@@ -25,9 +25,7 @@ var user = new User("山田太郎", myLifestyle, mySchedule, mySettings);
 //////////////////////////////////////////////////////////////////////
 
 //選択されたタスクの情報を取得
-var selected_task_id = Number(
-  window.sessionStorage.getItem(["selected_task_id"])
-);
+var selected_task_id = window.sessionStorage.getItem(["selected_task_id"]);
 var selected_task = "";
 for (const task of all_tasks) {
   if (task.id == selected_task_id) {
@@ -36,7 +34,7 @@ for (const task of all_tasks) {
 }
 
 //選択されたタスクを取得
-var detail_container = document.getElementById("detail_container");
+var detail_container = document.getElementById("detail_container")
 if (selected_task) {
   detail_container.innerHTML = `
     <div class="add_task__item">

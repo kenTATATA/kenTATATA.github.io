@@ -102,9 +102,11 @@ var user = new User("山田太郎", myLifestyle, mySchedule, mySettings);
 //未完了タスクの一覧表示
 //Taskの配列から表示
 document.getElementById("task_list_container").innerHTML = "";
-var i = 0;
+//実施日順にソート
+all_tasks.sort(function (a, b) {
+  return a.specified_time[0][0]["seconds"] > b.specified_time[0][0]["seconds"] ? 1 : -1;
+});
 for (const task of all_tasks) {
-  i++;
   var task_container = document.createElement("div");
   task_container.setAttribute("id", task.id.toString());
   task_container.classList.add("task_container");
@@ -113,8 +115,9 @@ for (const task of all_tasks) {
             `;
   for (const time of task.specified_time) {
     if (time[0] != null) {
-      let time_0 = new Date(time[0]["seconds"] * 1000);
-      let time_1 = new Date(time[0]["seconds"] * 1000);
+      console.log(time[0]);
+      let time_0 = time[0].toDate();
+      let time_1 = time[1].toDate();
 
       let year_0 = time_0.getFullYear();
       let month_0 = time_0.getMonth() + 1;
