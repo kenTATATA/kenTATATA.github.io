@@ -35,6 +35,10 @@ header button {
     padding: 4px 13px;
 }
 
+header button:hover {
+    background-color: #E0EDFF;
+}
+
 header button a {
     text-decoration: none;
     color: #66A1FF;
@@ -61,22 +65,26 @@ header button a {
 
 .task_container {
     cursor: pointer;
-    background-color:#E0EDFF;
+    background-color: #E0EDFF;
     width: 80%;
     padding: 16px 25px;
     margin-top: 10px;
     border-radius: 8px;
 }
 
+.task_container:hover {
+    background-color: #eff6ff;
+}
+
 .task_container h5 {
     cursor: pointer;
     font-size: 15px;
-    font-weight:500;
+    font-weight: 500;
     margin: 0 0 5px 0;
 }
 
-.task_container p{
-    margin:0;
+.task_container p {
+    margin: 0;
     font-size: 11px;
     color: #A6A6A6;
 }
