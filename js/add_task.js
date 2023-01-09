@@ -75,10 +75,33 @@ function form_check(task) {
     if (task.auto_scheduled == false) {
         var error_number_2 = 0;
 
-        for (const times of task.specified_time) {
-            //実施時間が入力されているか、現在時刻を越えていないか
+        if (task.days > 1) {
+            for (const times of task.specified_time) {
+                //実施時間が入力されているか、現在時刻を越えていないか
+                var error_number_3 = 0;
+                for (const time of times) {
+                    console.log(time);
+                    if (Number.isNaN(time.getTime())) {
+                        error_number_2 += 1;
+                        error_number_3 += 1;
+                    } else {
+                        if (time < present_time) {
+                            error_number_2 += 1;
+                            error_number_3 += 1;
+                        }
+                    }
+                }
+
+                //実施時間の順序は正しいか
+                if (error_number_3 == 0) {
+                    if (times[0] > times[1]) {
+                        error_number_2 += 1;
+                    }
+                }
+            }
+        } else {
             var error_number_3 = 0;
-            for (const time of times) {
+            for (const time of task.specified_time) {
                 if (Number.isNaN(time.getTime())) {
                     error_number_2 += 1;
                     error_number_3 += 1;
@@ -88,33 +111,37 @@ function form_check(task) {
                         error_number_3 += 1;
                     }
                 }
-            }
 
-            //実施時間の順序は正しいか
-            if (error_number_3 == 0) {
-                if (times[0] > times[1]) {
-                    error_number_2 += 1;
+
+                //実施時間の順序は正しいか
+                if (error_number_3 == 0) {
+                    if (time[0] > time[1]) {
+                        error_number_2 += 1;
+                    }
                 }
             }
         }
 
+
         //実施時間がすべて入力されている場合、それらに重複は無いか
-        if (error_number_2 == 0) {
-            task.specified_time.sort(function (a, b) {
-                return a[0] > b[0] ? 1 : -1;
-            });
+        if (task.days > 1) {
+            if (error_number_2 == 0) {
+                task.specified_time.sort(function (a, b) {
+                    return a[0] > b[0] ? 1 : -1;
+                });
 
-            var time_list = task.specified_time.flat();
-            var time_list_sorted = time_list.map((x) => x);
-            time_list_sorted.sort(function (a, b) {
-                return a > b ? 1 : -1;
-            });
+                var time_list = task.specified_time.flat();
+                var time_list_sorted = time_list.map((x) => x);
+                time_list_sorted.sort(function (a, b) {
+                    return a > b ? 1 : -1;
+                });
 
-            console.log(time_list);
-            console.log(time_list_sorted);
+                console.log(time_list);
+                console.log(time_list_sorted);
 
-            if (time_list.toString() != time_list_sorted.toString()) {
-                error_number_2 = -1;
+                if (time_list.toString() != time_list_sorted.toString()) {
+                    error_number_2 = -1;
+                }
             }
         }
 

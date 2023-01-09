@@ -8,7 +8,7 @@ export class Task {
      * @param {String} plan_or_task :予定かタスクか(内部では0,1で表す)
      * @param {Boolean} finished :終了済みか
      * @param {Boolean} duplicate :重複を許すか
-     * @param {Date} deadline :Taskの締め切り時間
+     * @param {Timestamp} deadline :Taskの締め切り時間
      * @param {Number} required_time :Taskの推定所要時間(時間)
      * @param {Number} days :何日に分けるか
      * @param {Boolean} auto_scheduled :自動スケジューリングするか
@@ -67,8 +67,9 @@ export class Task {
                 // throw new Error("この予定は指定時間が所要時間を満たさないため追加できません。");
             }
 
-            this.auto_scheduled = false;  // 変な入力があった時用
-            this.days = 1;
+            //これなんだ（石井）
+            //this.auto_scheduled = false;  // 変な入力があった時用
+            //this.days = 1;
 
             // specified_timeが複数あるとき
             if (this.specified_time.length > 1) {

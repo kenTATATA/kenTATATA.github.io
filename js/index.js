@@ -16,7 +16,7 @@ var user = new User(null, null, null, null, mySchedule, null);
 document.getElementById("task_list_container").innerHTML = "";
 //実施日順にソート
 all_tasks.sort(function (a, b) {
-  return a.specified_time[0][0]["seconds"] > b.specified_time[0][0]["seconds"] ? 1 : -1;
+  return a.specified_time[0][0] > b.specified_time[0][0] ? 1 : -1;
 });
 for (const task of all_tasks) {
   var task_container = document.createElement("div");
