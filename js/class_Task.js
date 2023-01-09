@@ -40,11 +40,16 @@ export class Task {
         this.finished = finished;
         this.duplicate = duplicate;
         this.deadline = deadline;
-        this.required_time = required_time * 3600000;
+        this.required_time = required_time * 1000 * 60 * 60;
         this.days = days;
         this.auto_scheduled = auto_scheduled;
         this.specified_time = specified_time;  // そのままの配列でもらう
         this.unit_time = unit_time * 1000 * 60 * 60;  // 時単位
+        this.repeat_unit = repeat_unit;
+        this.importance = importance;
+        this.place = place;
+        this.color = color;
+        this.valid = valid;
 
         // 子タスクの配列
         this.task_children = [];
@@ -136,5 +141,15 @@ export class Task {
                 }
             }
         }
+    }
+
+    // 2次元配列 → 1次元配列 (データベースから取り出す時の補助関数) 
+    TwoArrayToOneArray() {
+        this.specified_time = [this.specified_time[0][0], this.specified_time[0][1]];
+    }
+
+    // 1次元配列 → 2次元配列 (データベースに格納する時の補助関数) 
+    OneArrayToTwoArray() {
+        this.specified_time = [this.specified_time];
     }
 }
