@@ -5,7 +5,7 @@ export class Schedule {
         this.auto_schedule = auto_schedule; //自動スケジューリングするTask
         this.on_time = on_time; //時間が決まっているTask,予定
         this.other = other; // 重複を許すTask
-        this.all_tasks = this.returnAllTasks();
+        // this.all_tasks = this.returnAllTasks();
     }
 
     AutoScheduling() {
@@ -156,7 +156,7 @@ export class Schedule {
             this.other_tasks.push(task);
         }
 
-        this.all_tasks = this.returnAllTasks();
+        // this.all_tasks = this.returnAllTasks();
     }
 
     // タスクの予定の変更を行う
@@ -201,7 +201,7 @@ export class Schedule {
         }
 
         this.addTask(after);  // 新たにタスクを追加する (タスクの種類を考慮する必要がないようにする.)
-        this.all_tasks = this.returnAllTasks();  // 更新
+        // this.all_tasks = this.returnAllTasks();  // 更新
         console.log(before.name + "の内容を" + after.name + "に変更しました");
 
         if (matchNum <= 0) {
@@ -231,7 +231,7 @@ export class Schedule {
             }
         }
         this.AutoScheduling();
-        this.all_tasks = this.returnAllTasks();
+        // this.all_tasks = this.returnAllTasks();
     }
 
     // 時系列タスクの表示をするモジュール
@@ -258,40 +258,69 @@ export class Schedule {
     // all_tasksに全てのtaskを追加するモジュール (ここで, 分割した場合は統合する？) 
     // (子タスクの情報は親タスクから復元可能！ → 親タスクさえデータベースに格納しておいて, autoSchedulingで子タスクを展開すれば問題ない.)
     returnAllTasks() {
-        var i = 0;
-        var j = 0;
         var all_tasks = [];
         for (var task of this.on_time) {
-            if (task.task_children.length > 0) {
-                console.log("Nonnull");
-                for (var child of task.task_children) {
-                    all_tasks.push(child);
+            task_copy = Object.assign({}, task);
+            task_copy.required_time /= (1000 * 60 * 60);
+            task_copy.unit_time /= (1000 * 60 * 60);
+            if (task_copy.plan_or_task == 0) {
+                task_copy.plan_or_task = "Plan";
+            }
+            else {
+                task_copy.plan_or_task = "Task";
+            }
+            if (task_copy.task_children.length > 0) {
+                task_copy.specified_time = [];
+                for (var child of task_copy.task_children) {
+                    task_copy.specified_time.push(child.specified_time);
                 }
             }
             else {
-                console.log("null");
-                all_tasks.push(task);
+                task_copy.OneArrayToTwoArray();
             }
+            all_tasks.push(task_copy);
         }
         for (var task of this.auto_schedule) {
-            if (task.task_children.length > 0) {
-                for (var child of task.task_children) {
-                    all_tasks.push(child);
+            task_copy = Object.assign({}, task);
+            task_copy.required_time /= (1000 * 60 * 60);
+            task_copy.unit_time /= (1000 * 60 * 60);
+            if (task_copy.plan_or_task == 0) {
+                task_copy.plan_or_task = "Plan";
+            }
+            else {
+                task_copy.plan_or_task = "Task";
+            }
+            if (task_copy.task_children.length > 0) {
+                task_copy.specified_time = [];
+                for (var child of task_copy.task_children) {
+                    task_copy.specified_time.push(child.specified_time);
                 }
             }
             else {
-                all_tasks.push(task);
+                task_copy.OneArrayToTwoArray();
             }
+            all_tasks.push(task_copy);
         }
         for (var task of this.other) {
-            if (task.task_children.length > 0) {
-                for (var child of task.task_children) {
-                    all_tasks.push(child);
+            task_copy = Object.assign({}, task);
+            task_copy.required_time /= (1000 * 60 * 60);
+            task_copy.unit_time /= (1000 * 60 * 60);
+            if (task_copy.plan_or_task == 0) {
+                task_copy.plan_or_task = "Plan";
+            }
+            else {
+                task_copy.plan_or_task = "Task";
+            }
+            if (task_copy.task_children.length > 0) {
+                task_copy.specified_time = [];
+                for (var child of task_copy.task_children) {
+                    task_copy.specified_time.push(child.specified_time);
                 }
             }
             else {
-                all_tasks.push(task);
+                task_copy.OneArrayToTwoArray();
             }
+            all_tasks.push(task_copy);
         }
 
         return all_tasks;
