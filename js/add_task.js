@@ -9,10 +9,8 @@ import { uuidv4 } from "./create_uuid.js";
 //(KIM)ユーザー情報を取得
 //////////////////////////////////////////////////////////////////////
 //(仮)ローカルにユーザー情報を作成
-var myLifestyle = new Schedule([], [], []);
 var mySchedule = new Schedule([], [], []);
-var mySettings = new Settings();
-var user = new User("山田太郎", myLifestyle, mySchedule, mySettings);
+var user = new User(null, null, null, null, mySchedule, null);
 //////////////////////////////////////////////////////////////////////
 
 //main関数
@@ -29,6 +27,7 @@ document.getElementById("submit__btn").addEventListener("click", function () {
     //Scheduleクラスに格納
     user.schedule.addTask(new_task);
 
+    all_tasksをaddTaskする
     all_tasks.forEach((e) => {
         user.schedule.addTask(e);
     });
@@ -38,8 +37,6 @@ document.getElementById("submit__btn").addEventListener("click", function () {
     console.log(updated_tasks);
     firebase_send(updated_tasks);
     //トップページに戻る
-    //トップページでデータベースからタスクを取得
-    //トップページでタスクを表示
     // window.location.href = '../constructor/index.html';
 });
 
@@ -170,9 +167,11 @@ function Plan_or_Task() {
 document.getElementById("auto_scheduling").onchange = AutoScheduling;
 function AutoScheduling() {
     if (document.getElementById("auto_scheduling").checked === true) {
+        document.getElementById("auto_scheduling_true").style.display = "";
         document.getElementById("number_of_imp_days").onchange = "";
         document.getElementById("imp_date__form--container").innerHTML = "";
     } else {
+        document.getElementById("auto_scheduling_true").style.display = "none";
         document.getElementById("number_of_imp_days").onchange = CreatingForm;
         CreatingForm();
     }
@@ -455,7 +454,13 @@ function get_new_task() {
         required_time,
         Number(a["number_of_imp_days"]),
         a["auto_scheduling"],
-        new_specified_time
+        new_specified_time,
+        a["unit_time"],
+        null,
+        Number(a["importance"]),
+        a["place"],
+        a["color"],
+        true
     );
 
     console.log(new_specified_time);

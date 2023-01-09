@@ -14,10 +14,10 @@ export class Task {
      * @param {Boolean} auto_scheduled :自動スケジューリングするか
      * @param {List} specified_time :開始時間, 終了時間(入力は二次元配列で受け取り,内部では一次元配列で表す)
      * @param {Number} unit_time :単位時間 (時間) (childでは-1であるとする)
-     * @param {String} repeat_unit :繰り返し単位（毎年/毎月/毎週/毎日/null (定例スケジュール用)）
-     * @param {Number} importance :重要度
+     * @param {String} repeat_unit :繰り返し単位（year/month/week/day/null (定例スケジュール用)）
+     * @param {Number} importance :重要度(1~5)
      * @param {String} place :場所
-     * @param {String} color :色
+     * @param {String} color :色(red,orange,yellow,green,blue,purple)
      * @param {Boolean} valid :有効か無効かを表すフラグ
      */
     constructor(id, name, category, overview, favorite, plan_or_task, finished, duplicate, deadline, required_time,
@@ -64,7 +64,7 @@ export class Task {
                 restTime = restTime - (this.specified_time[i][1] - this.specified_time[i][0]);
             }
             if (restTime > 0) {
-                throw new Error("この予定は指定時間が所要時間を満たさないため追加できません。");
+                // throw new Error("この予定は指定時間が所要時間を満たさないため追加できません。");
             }
 
             this.auto_scheduled = false;  // 変な入力があった時用
