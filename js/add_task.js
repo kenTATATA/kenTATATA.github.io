@@ -167,9 +167,11 @@ function Plan_or_Task() {
 document.getElementById("auto_scheduling").onchange = AutoScheduling;
 function AutoScheduling() {
     if (document.getElementById("auto_scheduling").checked === true) {
+        document.getElementById("auto_scheduling_true").style.display = "";
         document.getElementById("number_of_imp_days").onchange = "";
         document.getElementById("imp_date__form--container").innerHTML = "";
     } else {
+        document.getElementById("auto_scheduling_true").style.display = "none";
         document.getElementById("number_of_imp_days").onchange = CreatingForm;
         CreatingForm();
     }
@@ -452,7 +454,13 @@ function get_new_task() {
         required_time,
         Number(a["number_of_imp_days"]),
         a["auto_scheduling"],
-        new_specified_time
+        new_specified_time,
+        a["unit_time"],
+        null,
+        Number(a["importance"]),
+        a["place"],
+        a["color"],
+        true
     );
 
     console.log(new_specified_time);

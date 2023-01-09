@@ -407,17 +407,19 @@
                         <p>スケジューリング設定</p>
                         <input type="checkbox" value="task_duplication" name="task_duplication" />タスクの重複を許す
                         <br>
-                        重要度：
-                        <select name="importance" id="importance">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                        <br>
-                        分割する時間の単位：
-                        <input name="unit_time" id="unit_time" type="number" value="30" min="1"></input>分
+                        <div id="auto_scheduling_true">
+                            重要度：
+                            <select name="importance" id="importance">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                            <br>
+                            分割する時間の単位：
+                            <input name="unit_time" id="unit_time" type="number" value="30" min="1"></input>分
+                        </div>
                     </div>
 
 
@@ -438,7 +440,7 @@
 
                     <div class="add_task__item">
                         <p>色</p>
-                        <select name="importance" id="importance">
+                        <select name="color" id="color">
                             <option value="red">red</option>
                             <option value="orange">orange</option>
                             <option value="yellow">yellow</option>
