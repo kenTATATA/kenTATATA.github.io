@@ -9,10 +9,8 @@ import { uuidv4 } from "./create_uuid.js";
 //(KIM)ユーザー情報を取得
 //////////////////////////////////////////////////////////////////////
 //(仮)ローカルにユーザー情報を作成
-var myLifestyle = new Schedule([], [], []);
 var mySchedule = new Schedule([], [], []);
-var mySettings = new Settings();
-var user = new User("山田太郎", myLifestyle, mySchedule, mySettings);
+var user = new User(null, null, null, null, mySchedule, null);
 //////////////////////////////////////////////////////////////////////
 
 //main関数
@@ -29,6 +27,7 @@ document.getElementById("submit__btn").addEventListener("click", function () {
     //Scheduleクラスに格納
     user.schedule.addTask(new_task);
 
+    all_tasksをaddTaskする
     all_tasks.forEach((e) => {
         user.schedule.addTask(e);
     });
@@ -38,8 +37,6 @@ document.getElementById("submit__btn").addEventListener("click", function () {
     console.log(updated_tasks);
     firebase_send(updated_tasks);
     //トップページに戻る
-    //トップページでデータベースからタスクを取得
-    //トップページでタスクを表示
     // window.location.href = '../constructor/index.html';
 });
 

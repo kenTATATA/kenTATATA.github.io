@@ -7,10 +7,8 @@ import { Settings } from "../js/class_Settings.js";
 //(KIM)ユーザー情報を取得
 //////////////////////////////////////////////////////////////////////
 //(仮)ローカルにユーザー情報を作成
-var myLifestyle = new Schedule([], [], []);
 var mySchedule = new Schedule([], [], []);
-var mySettings = new Settings();
-var user = new User("山田太郎", myLifestyle, mySchedule, mySettings);
+var user = new User(null, null, null, null, mySchedule, null);
 //////////////////////////////////////////////////////////////////////
 
 //未完了タスクの一覧表示
