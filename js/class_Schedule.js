@@ -263,6 +263,12 @@ export class Schedule {
             task_copy = Object.assign({}, task);
             task_copy.required_time /= (1000 * 60 * 60);
             task_copy.unit_time /= (1000 * 60 * 60);
+            if (task_copy.plan_or_task == 0) {
+                task_copy.plan_or_task = "Plan";
+            }
+            else {
+                task_copy.plan_or_task = "Task";
+            }
             if (task_copy.task_children.length > 0) {
                 task_copy.specified_time = [];
                 for (var child of task_copy.task_children) {
@@ -278,6 +284,12 @@ export class Schedule {
             task_copy = Object.assign({}, task);
             task_copy.required_time /= (1000 * 60 * 60);
             task_copy.unit_time /= (1000 * 60 * 60);
+            if (task_copy.plan_or_task == 0) {
+                task_copy.plan_or_task = "Plan";
+            }
+            else {
+                task_copy.plan_or_task = "Task";
+            }
             if (task_copy.task_children.length > 0) {
                 task_copy.specified_time = [];
                 for (var child of task_copy.task_children) {
@@ -293,6 +305,12 @@ export class Schedule {
             task_copy = Object.assign({}, task);
             task_copy.required_time /= (1000 * 60 * 60);
             task_copy.unit_time /= (1000 * 60 * 60);
+            if (task_copy.plan_or_task == 0) {
+                task_copy.plan_or_task = "Plan";
+            }
+            else {
+                task_copy.plan_or_task = "Task";
+            }
             if (task_copy.task_children.length > 0) {
                 task_copy.specified_time = [];
                 for (var child of task_copy.task_children) {
