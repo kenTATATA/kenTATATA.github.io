@@ -1,13 +1,10 @@
 import { app } from "./firebase_config.js";
 import {
   doc,
-  collection,
-  getDocs,
-  setDoc,
   getDoc,
   getFirestore,
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
-import { Task } from "./task.js";
+import { Task } from "./class_Task.js";
 
 const user_id = localStorage.getItem("uid");
 const db = getFirestore(app);
@@ -51,6 +48,12 @@ if (docsnap.data() != null) {
         data[9],
         data[10],
         data[11],
+        data[12],
+        data[13],
+        data[14],
+        data[15],
+        data[16],
+        data[17],
         arr_specified_time
       );
     } else {
@@ -67,6 +70,12 @@ if (docsnap.data() != null) {
         data[9],
         data[10],
         data[11],
+        data[12],
+        data[13],
+        data[14],
+        data[15],
+        data[16],
+        data[17],
         arr_specified_time
       );
     }

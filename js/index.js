@@ -18,7 +18,7 @@ var user = new User("山田太郎", myLifestyle, mySchedule, mySettings);
 document.getElementById("task_list_container").innerHTML = "";
 //実施日順にソート
 all_tasks.sort(function (a, b) {
-  return a.specified_time[0][0]["seconds"] > b.specified_time[0][0]["seconds"] ? 1 : -1;
+  return a.specified_time[0][0] > b.specified_time[0][0] ? 1 : -1;
 });
 for (const task of all_tasks) {
   var task_container = document.createElement("div");
@@ -52,7 +52,6 @@ for (const task of all_tasks) {
         <p>実施日：${year_0}/${month_0}/${date_0}/${hour_0}:${minute_0}~${year_1}/${month_1}/${date_1}/${hour_1}:${minute_1}</p>
             `;
     }
-
   }
   if (task.deadline != null) {
     let time_d = new Date(task.deadline);
