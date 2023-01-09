@@ -61,8 +61,6 @@ export function firebase_send(AllTask) {
         e.required_time,
         e.days,
         e.auto_scheduled,
-        new Date(e.specified_time[0]),
-        new Date(e.specified_time[1]),
       ];
       for (let i = 0; i < e.specified_time.length; i + 2) {
         docData[e.id].push(e.specified_time[i]);

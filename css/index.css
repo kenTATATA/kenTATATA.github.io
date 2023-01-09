@@ -70,6 +70,7 @@ header button a {
     padding: 16px 25px;
     margin-top: 10px;
     border-radius: 8px;
+    position: relative;
 }
 
 .task_container:hover {
@@ -87,4 +88,11 @@ header button a {
     margin: 0;
     font-size: 11px;
     color: #A6A6A6;
+}
+
+.star {
+    position: absolute;
+    width: 25px;
+    right:15px;
+    top: 13px;
 }

@@ -27,6 +27,11 @@ for (const task of all_tasks) {
   task_container.innerHTML = `
         <h5>${task.name}</h5>
             `;
+  if (task.favorite == true) {
+    task_container.innerHTML += `
+    <img class="star" src="../img/star.png" />
+                      `;
+  }
   for (const time of task.specified_time) {
     if (time[0] != null) {
       console.log(time[0]);

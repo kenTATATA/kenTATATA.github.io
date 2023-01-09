@@ -61,7 +61,7 @@ if (docsnap.data() != null) {
         data[5],
         data[6],
         data[7],
-        data[8].toDate(),
+        data[8].seconds * 1000,
         data[9],
         data[10],
         data[11],
