@@ -260,7 +260,7 @@ export class Schedule {
     returnAllTasks() {
         var all_tasks = [];
         for (var task of this.on_time) {
-            task_copy = Object.assign({}, task);
+            var task_copy = Object.assign({}, task);
             task_copy.required_time /= (1000 * 60 * 60);
             task_copy.unit_time /= (1000 * 60 * 60);
             if (task_copy.plan_or_task == 0) {

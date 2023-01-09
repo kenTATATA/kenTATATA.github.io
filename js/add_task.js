@@ -27,7 +27,7 @@ document.getElementById("submit__btn").addEventListener("click", function () {
     //Scheduleクラスに格納
     user.schedule.addTask(new_task);
 
-    all_tasksをaddTaskする
+    //all_tasksをaddTaskする
     all_tasks.forEach((e) => {
         user.schedule.addTask(e);
     });
@@ -418,7 +418,7 @@ function get_new_task() {
             new Number(a["len_hour"]) + new Number(a["len_minute"]) / 60;
     }
 
-    let new_specified_time = [[0, 0]];
+    let new_specified_time = null;
     if (a["auto_scheduling"] == false) {
         new_specified_time = [];
         for (var i = 1; i < Number(a["number_of_imp_days"]) + 1; i++) {
