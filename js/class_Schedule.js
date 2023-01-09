@@ -1,6 +1,6 @@
-// import {Task} from '../js/class_Task.js';
+import {Task} from '../js/class_Task.js';
 
-class Schedule {
+export class Schedule {
     constructor(auto_schedule, on_time, other) {  // データベースに元々格納してあるデータを持ってくる.
         this.auto_schedule = auto_schedule; //自動スケジューリングするTask
         this.on_time = on_time; //時間が決まっているTask,予定
@@ -482,3 +482,4 @@ user1.schedule.editTask(tasks[5], tasks[6]);  // 変更 (締め切り時間が�
 //user1.lifestyle.addTask(plan1);
 
 user1.schedule.viewAllTasks();
+

@@ -1,0 +1,98 @@
+body {
+    font: Noto Sans JP;
+    margin: 0;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    padding: 25px 30px;
+    border-bottom: solid 5px #E0EDFF;
+}
+
+header h1 {
+    font-size: 25px;
+    letter-spacing: 1px;
+    font-weight: 100;
+    color: #66A1FF;
+    margin: 0;
+}
+
+header p {
+    margin: 0 0 0 auto;
+    color: #66A1FF;
+}
+
+header button {
+    margin-left: 20px;
+    background-color: white;
+    color: white;
+    border: solid 1px #66A1FF;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    border-radius: 2px;
+    padding: 4px 13px;
+}
+
+header button:hover {
+    background-color: #E0EDFF;
+}
+
+header button a {
+    text-decoration: none;
+    color: #66A1FF;
+}
+
+.main_content {
+    padding: 25px 30px;
+}
+
+.add_task_link {
+    text-decoration: none;
+}
+
+.add_task_link img {
+    vertical-align: middle;
+    width: 32px;
+}
+
+.add_task_link p {
+    display: inline-block;
+    vertical-align: middle;
+    color: #66A1FF;
+}
+
+.task_container {
+    cursor: pointer;
+    background-color: #E0EDFF;
+    width: 80%;
+    padding: 16px 25px;
+    margin-top: 10px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.task_container:hover {
+    background-color: #eff6ff;
+}
+
+.task_container h5 {
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 5px 0;
+}
+
+.task_container p {
+    margin: 0;
+    font-size: 11px;
+    color: #A6A6A6;
+}
+
+.star {
+    position: absolute;
+    width: 25px;
+    right:15px;
+    top: 13px;
+}

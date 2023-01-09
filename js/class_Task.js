@@ -1,4 +1,4 @@
-class Task {
+export class Task {
     /** (引数の数：19個)
      * @param {Number} id :Taskのid
      * @param {String} name :Task名

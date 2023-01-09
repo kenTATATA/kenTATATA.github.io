@@ -1,4 +1,4 @@
-class Settings {
+export class Settings {
     /**
      * {Number} unit_time :ユーザの単位時間(例:15分, 30分, 45分, 60分)
      */

@@ -1,4 +1,4 @@
-class User {
+export class User {
     /**
      * @param {Number} id :ユーザーID
      * @param {String} name :ユーザー名
