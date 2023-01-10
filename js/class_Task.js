@@ -145,12 +145,12 @@ export class Task {
     }
 
     // 2次元配列 → 1次元配列 (データベースから取り出す時の補助関数) 
-    TwoArrayToOneArray() {
-        this.specified_time = [this.specified_time[0][0], this.specified_time[0][1]];
-    }
+    // TwoArrayToOneArray() {
+    //     this.specified_time = [this.specified_time[0][0], this.specified_time[0][1]];
+    // }
 
-    // 1次元配列 → 2次元配列 (データベースに格納する時の補助関数) 
-    OneArrayToTwoArray() {
-        this.specified_time = [this.specified_time];
-    }
+    // // 1次元配列 → 2次元配列 (データベースに格納する時の補助関数) 
+    // OneArrayToTwoArray() {
+    //     this.specified_time = [this.specified_time];
+    // }
 }

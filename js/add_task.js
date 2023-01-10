@@ -48,7 +48,7 @@ function form_check(task) {
     );
     error_messages_container.innerHTML = "";
     error_number = 0;
-    var present_time = new Date();
+    var present_time = new Date().getTime();
 
     //nameが入力されているか
     if (task.name == "") {
@@ -58,6 +58,8 @@ function form_check(task) {
     //Taskのときのみ
     if (task.plan_or_task == "Task") {
         //deadlineが入力されているか、入力されている場合、現在時刻を越えていないか
+        console.log("asfdasdadasdsadsada");
+        console.log(task.deadline);
         if (Number.isNaN(task.deadline)) {
             error_message(`※締切日を入力してください。`);
         } else {
@@ -440,7 +442,8 @@ function get_new_task() {
     } else {
         var deadline_date = new Date(
             a["deadline_date"] + " " + a["deadline_hour"] + ":" + a["deadline_minute"]
-        );
+        ).getTime();
+        console.log("deadline_date:" + deadline_date);
         var required_time =
             new Number(a["len_hour"]) + new Number(a["len_minute"]) / 60;
     }
@@ -455,14 +458,14 @@ function get_new_task() {
                 a["imp_start_hour_" + String(i)] +
                 ":" +
                 a["imp_start_minute_" + String(i)]
-            );
+            ).getTime();
             var imp_end_date = new Date(
                 a["imp_date_" + String(i)] +
                 " " +
                 a["imp_end_hour_" + String(i)] +
                 ":" +
                 a["imp_end_minute_" + String(i)]
-            );
+            ).getTime();
             new_specified_time.push([imp_start_date, imp_end_date]);
         }
     }

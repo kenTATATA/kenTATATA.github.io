@@ -260,7 +260,7 @@ export class Schedule {
     returnAllTasks() {
         var all_tasks = [];
         for (var task of this.on_time) {
-            var task_copy = Object.assign({}, task);
+            let task_copy = Object.assign({}, task);
             task_copy.required_time /= (1000 * 60 * 60);
             task_copy.unit_time /= (1000 * 60 * 60);
             if (task_copy.plan_or_task == 0) {
@@ -276,12 +276,12 @@ export class Schedule {
                 }
             }
             else {
-                task_copy.OneArrayToTwoArray();
+                task_copy.specified_time = [task_copy.specified_time];
             }
             all_tasks.push(task_copy);
         }
         for (var task of this.auto_schedule) {
-            task_copy = Object.assign({}, task);
+            let task_copy = Object.assign({}, task);
             task_copy.required_time /= (1000 * 60 * 60);
             task_copy.unit_time /= (1000 * 60 * 60);
             if (task_copy.plan_or_task == 0) {
@@ -297,7 +297,7 @@ export class Schedule {
                 }
             }
             else {
-                task_copy.OneArrayToTwoArray();
+                task_copy.specified_time = [task_copy.specified_time];
             }
             all_tasks.push(task_copy);
         }
@@ -318,7 +318,7 @@ export class Schedule {
                 }
             }
             else {
-                task_copy.OneArrayToTwoArray();
+                task_copy.specified_time = [task_copy.specified_time];
             }
             all_tasks.push(task_copy);
         }
