@@ -50,7 +50,6 @@ for (const task of all_tasks) {
         <p>実施日：${year_0}/${month_0}/${date_0}/${hour_0}:${minute_0}~${year_1}/${month_1}/${date_1}/${hour_1}:${minute_1}</p>
             `;
     }
-
   }
   if (task.deadline != null) {
     let time_d = new Date(task.deadline);
