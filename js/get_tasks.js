@@ -25,7 +25,7 @@ if (docsnap.data() != null) {
 
     //コンストラクターのspecified_timeを除いた引数の数
     //統合後変えるよ！！！
-    let number_of_parameter = 12;
+    const number_of_parameter = 18;
     let for_times = (data.length - number_of_parameter) / 2;
     let arr_specified_time = [];
     for (let i = 0; i < for_times; i++) {
@@ -34,51 +34,27 @@ if (docsnap.data() != null) {
         data[number_of_parameter + i * 2 + 1],
       ]);
     }
-    if (data[8] == null) {
-      task = new Task(
-        data[0],
-        data[1],
-        data[2],
-        data[3],
-        data[4],
-        data[5],
-        data[6],
-        data[7],
-        data[8],
-        data[9],
-        data[10],
-        data[11],
-        data[12],
-        data[13],
-        data[14],
-        data[15],
-        data[16],
-        data[17],
-        arr_specified_time
-      );
-    } else {
-      task = new Task(
-        data[0],
-        data[1],
-        data[2],
-        data[3],
-        data[4],
-        data[5],
-        data[6],
-        data[7],
-        data[8].seconds * 1000,
-        data[9],
-        data[10],
-        data[11],
-        data[12],
-        data[13],
-        data[14],
-        data[15],
-        data[16],
-        data[17],
-        arr_specified_time
-      );
-    }
+    task = new Task(
+      data[0],
+      data[1],
+      data[2],
+      data[3],
+      data[4],
+      data[5],
+      data[6],
+      data[7],
+      data[8],
+      data[9],
+      data[10],
+      data[11],
+      arr_specified_time,
+      data[12],
+      data[13],
+      data[14],
+      data[15],
+      data[16],
+      data[17]
+    );
     all_tasks.push(task);
     // console.log(docsnap.data()[Object.keys(docsnap.data())[i]]);
   }

@@ -2,7 +2,9 @@ import { Task } from "../js/class_Task.js";
 import { User } from "../js/class_User.js";
 import { Schedule } from "../js/class_Schedule.js";
 import { Settings } from "../js/class_Settings.js";
+import { firebase_send } from "./data_send.js";
 import { all_tasks } from "./get_tasks.js";
+import { timestampToDisplay } from "../js/common.js";
 
 //(KIM)ユーザー情報を取得
 //////////////////////////////////////////////////////////////////////
@@ -31,29 +33,102 @@ for (const task of all_tasks) {
   }
 }
 
-//選択されたタスクを取得
+
+//選択されたタスクの詳細を表示
 var detail_container = document.getElementById("detail_container")
 if (selected_task) {
-  console.log(selected_task.required_time);
+  let plan_or_task;
+  if (selected_task.plan_or_task == 0) {
+    plan_or_task = "予定";
+  } else {
+    plan_or_task = "タスク";
+  }
+
+  let auto_scheduled = "";
+  if (selected_task.plan_or_task == 1) {
+    if (selected_task.auto_scheduled == true) {
+      auto_scheduled = "自動でスケジューリングする<br>";
+    } else {
+      auto_scheduled = "自動でスケジューリングしない<br>";
+    }
+  }
+
+
+  let specified_times = ``;
+  let number_of_child = 0;
+  for (let child of selected_task.task_children) {
+    ++number_of_child;
+    specified_times += `
+    実施日${number_of_child}：${timestampToDisplay(child.specified_time[0])}~${timestampToDisplay(child.specified_time[1])}
+    <br>
+    `
+  }
+
+  let duplicate;
+  if (selected_task.duplicate == true) {
+    duplicate = "タスクの重複を許す";
+  } else {
+    duplicate = "タスクの重複を許さない";
+  }
+
+  let importance = "";
+  let unit_time = "";
+  if (selected_task.auto_scheduled == true) {
+    importance = "重要度：" + selected_task.importance;
+    unit_time = "<br>分割する時間の単位:" + (selected_task.unit_time / (1000 * 60 * 60)) + "分";
+  }
+
+  let favorite;
+  if (selected_task.favorite == true) {
+    favorite = "お気に入り登録する";
+  } else {
+    favorite = "お気に入り登録しない";
+  }
+
   detail_container.innerHTML = `
+    <div class="add_task__item">
+    <p>種類</p>
+    ${plan_or_task}
+    </div>
+
     <div class="add_task__item">
     <p>タスク名</p>
     ${selected_task.name}
     </div>
+  `;
+
+  if (selected_task.plan_or_task == 1) {
+    detail_container.innerHTML += `
     <div class="add_task__item">
     <p>締切日</p>
-    ${selected_task.deadline}
+    ${timestampToDisplay(selected_task.deadline)}
     </div>
+
     <div class="add_task__item">
     <p>推定予定時間</p>
-    ${selected_task.required_time}
+    ${selected_task.required_time / (1000 * 60 * 60)}時間
     </div>
+  `;
+  }
+
+
+  detail_container.innerHTML += `
     <div class="add_task__item">
-    <p>実施予定日</p>
-    ${selected_task.duplicate}
-    ${selected_task.days}
-    ${selected_task.specified_time[0][0].toDate()}
+    <p>実施時間</p>
+    ${auto_scheduled}
+    実施日数：${selected_task.days}日
+    <br>
+    ${specified_times}
     </div>
+
+    <div class="add_task__item">
+    <p>スケジューリング設定</p>
+    ${duplicate}
+    <br>
+    ${importance}
+    ${unit_time}
+    </div>
+
     <div class="add_task__item">
     <p>概要</p>
     ${selected_task.overview}
@@ -65,12 +140,46 @@ if (selected_task) {
     </div>
 
     <div class="add_task__item">
-    <p>お気に入り</p>
-    ${selected_task.favorite}
+    <p>場所</p>
+    ${selected_task.place}
     </div>
+
+    <div class="add_task__item">
+    <p>色</p>
+    ${selected_task.color}
+    </div>
+
+    <div class="add_task__item">
+    <p>お気に入り</p>
+    ${favorite}
+    </div>
+
+    <button type="button" id="remove__btn">削除</button>
+    <button type="button" id="edit__btn">編集</button>
             `;
+
+  //削除処理
+  //validをfalseにする
+  document.getElementById("remove__btn").addEventListener("click", function () {
+    if (window.confirm("本当に削除しますか？")) {
+      selected_task.valid = false;
+      firebase_send(all_tasks);
+      // window.location.href = '../constructor/index.html';
+    }
+  });
+
+  document.getElementById("edit__btn").addEventListener("click", function () {
+    window.location.href = '../constructor/add_task.html';
+  });
+
 } else {
+  // selected_taskがなぜか無いとき
   detail_container.innerHTML = `
     予期せぬエラーが発生しました。
             `;
 }
+
+document.getElementById("cancel__btn").addEventListener("click", function () {
+  window.location.href = '../constructor/index.html';
+});
+

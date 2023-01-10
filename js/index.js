@@ -3,6 +3,7 @@ import { Task } from "../js/class_Task.js";
 import { User } from "../js/class_User.js";
 import { Schedule } from "../js/class_Schedule.js";
 import { Settings } from "../js/class_Settings.js";
+import { timestampToDisplay } from "../js/common.js";
 
 //(KIM)ユーザー情報を取得
 //////////////////////////////////////////////////////////////////////
@@ -16,61 +17,51 @@ var user = new User(null, null, null, null, mySchedule, null);
 document.getElementById("task_list_container").innerHTML = "";
 //実施日順にソート
 all_tasks.sort(function (a, b) {
-  return a.specified_time[0][0] > b.specified_time[0][0] ? 1 : -1;
+  return a.task_children[0].specified_time[0] > b.task_children[0].specified_time[0] ? 1 : -1;
 });
 for (const task of all_tasks) {
-  var task_container = document.createElement("div");
-  task_container.setAttribute("id", task.id.toString());
-  task_container.classList.add("task_container");
-  task_container.innerHTML = `
+  if (task.valid == true) {
+    var task_container = document.createElement("div");
+    task_container.setAttribute("id", task.id.toString());
+    task_container.classList.add("task_container");
+    task_container.innerHTML = `
         <h5>${task.name}</h5>
             `;
-  if (task.favorite == true) {
-    task_container.innerHTML += `
+    if (task.favorite == true) {
+      task_container.innerHTML += `
     <img class="star" src="../img/star.png" />
                       `;
-  }
-  for (const time of task.specified_time) {
-    if (time[0] != null) {
-      console.log(time[0]);
-      let time_0 = time[0].toDate();
-      let time_1 = time[1].toDate();
+    }
 
-      let year_0 = time_0.getFullYear();
-      let month_0 = time_0.getMonth() + 1;
-      let date_0 = time_0.getDate();
-      let hour_0 = time_0.getHours();
-      let minute_0 = time_0.getMinutes();
-      let year_1 = time_1.getFullYear();
-      let month_1 = time_1.getMonth() + 1;
-      let date_1 = time_1.getDate();
-      let hour_1 = time_1.getHours();
-      let minute_1 = time_1.getMinutes();
+    let number_of_child = 0;
+    for (const child of task.task_children) {
+      ++number_of_child;
+      let time_0 = timestampToDisplay(child.specified_time[0]);
+      let time_1 = timestampToDisplay(child.specified_time[1]);
+
       task_container.innerHTML += `
-        <p>実施日：${year_0}/${month_0}/${date_0}/${hour_0}:${minute_0}~${year_1}/${month_1}/${date_1}/${hour_1}:${minute_1}</p>
+      <p>実施日${number_of_child}：${time_0}~${time_1}</p>
             `;
     }
-  }
-  if (task.deadline != null) {
-    let time_d = new Date(task.deadline);
-    let year_d = time_d.getFullYear();
-    let month_d = time_d.getMonth() + 1;
-    let date_d = time_d.getDate();
-    let hour_d = time_d.getHours();
-    let minute_d = time_d.getMinutes();
-    task_container.innerHTML += `
-       <p>締切日：${year_d}/${month_d}/${date_d}/${hour_d}:${minute_d}</p>
+    if (task.deadline != null) {
+      let time_d = timestampToDisplay(task.deadline);
+      task_container.innerHTML += `
+       <p>締切日：${time_d}</p>
        `;
+    }
+
+    document.getElementById("task_list_container").appendChild(task_container);
   }
 
-  document.getElementById("task_list_container").appendChild(task_container);
 }
 //詳細ボタンがクリックされたときに、セッションにそのタスクidを保存してから、detail.htmlへ移動
 for (const task of all_tasks) {
-  document
-    .getElementById(task.id.toString())
-    .addEventListener("click", function () {
-      window.sessionStorage.setItem(["selected_task_id"], [task.id.toString()]);
-      window.location.href = "../constructor/detail.html";
-    });
+  if (task.valid == true) {
+    document
+      .getElementById(task.id.toString())
+      .addEventListener("click", function () {
+        window.sessionStorage.setItem(["selected_task_id"], [task.id.toString()]);
+        window.location.href = "../constructor/detail.html";
+      });
+  }
 }

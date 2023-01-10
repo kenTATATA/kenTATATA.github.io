@@ -28,20 +28,26 @@ export function firebase_send(AllTask) {
   let docData = {};
   AllTask.forEach((e) => {
     console.log(AllTask);
+    let plan_or_task;
+    if (e.plan_or_task == 0) {
+      plan_or_task = "Plan";
+    } else {
+      plan_or_task = "Task";
+    }
     docData[e.id] = [
       e.id,
       e.name,
       e.category,
       e.overview,
       e.favorite,
-      e.plan_or_task,
+      plan_or_task,
       e.finished,
       e.duplicate,
       e.deadline,
-      e.required_time,
+      e.required_time / (1000 * 60 * 60),
       e.days,
       e.auto_scheduled,
-      e.unit_time,
+      e.unit_time / (1000 * 60 * 60),
       e.repeat_unit,
       e.importance,
       e.place,

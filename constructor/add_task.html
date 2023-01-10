@@ -12,8 +12,10 @@
     <div class="side_bar">
         <div class="add_task">
             <form name="add_task__form">
-                <h3>新規予定・タスク作成</h3>
-                <div class="add_task--button"><a href="index.html">キャンセル</a></div>
+                <h3 id="title_new" >新規予定・タスク作成</h3>
+                <h3 id="title_edit" style="display:none;">予定・タスク編集</h3>
+                <button type="button" id="cancel__btn">キャンセル</button>
+                <br>
                 種類：
                 <select name="plan_or_task" id="plan_or_task">
                     <option value="Plan">予定</option>
@@ -22,11 +24,11 @@
                 <hr>
                 <div class="add_task__item">
                     <p>タスク名</p>
-                    <input name="title" type="text" placeholder="入力してください"></input>
+                    <input name="title" id="title" type="text" placeholder="入力してください"></input>
                 </div>
                 <div id="deadline_form" class="add_task__item" style="display: none;">
                     <p>締切日</p>
-                    <input name="deadline_date" type="date"></input>
+                    <input name="deadline_date" id="deadline_date" type="date"></input>
                     <select name="deadline_hour" id="deadline_hour">
                         <option value="00">00</option>
                         <option value="01">01</option>
@@ -405,7 +407,8 @@
 
                     <div class="add_task__item">
                         <p>スケジューリング設定</p>
-                        <input type="checkbox" value="task_duplication" name="task_duplication" />タスクの重複を許す
+                        <input type="checkbox" value="task_duplication" name="task_duplication"
+                            id="task_duplication" />タスクの重複を許す
                         <br>
                         <div id="auto_scheduling_true">
                             重要度：
@@ -425,17 +428,17 @@
 
                     <div class="add_task__item">
                         <p>概要</p>
-                        <textarea name="overview" placeholder="入力してください"></textarea>
+                        <textarea name="overview" id="overview" placeholder="入力してください"></textarea>
                     </div>
 
                     <div class="add_task__item">
                         <p>カテゴリ</p>
-                        <input name="category" type="text" placeholder="入力してください"></input>
+                        <input name="category" id="category" type="text" placeholder="入力してください"></input>
                     </div>
 
                     <div class="add_task__item">
                         <p>場所</p>
-                        <input name="place" type="text" placeholder="入力してください"></input>
+                        <input name="place" id="place" type="text" placeholder="入力してください"></input>
                     </div>
 
                     <div class="add_task__item">
@@ -451,10 +454,10 @@
                     </div>
 
                     <div class="add_task__item">
-                        <input type="checkbox" value="favorite" name="favorite" />お気に入り
+                        <input type="checkbox" value="favorite" name="favorite" id="favorite" />お気に入り
                     </div>
 
-                    <button type="button" id="submit__btn">追加</button>
+                    <button type="button" id="submit__btn">確定</button>
 
 
                     <div id="error_messages_container"></div>
