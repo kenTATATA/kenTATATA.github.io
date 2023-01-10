@@ -4,7 +4,7 @@ import {
   getDoc,
   getFirestore,
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
-import { Task } from "./class_Task.js";
+import { Task } from "../js/class_Task.js";
 
 const user_id = localStorage.getItem("uid");
 const db = getFirestore(app);

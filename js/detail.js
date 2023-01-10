@@ -7,10 +7,8 @@ import { all_tasks } from "./get_tasks.js";
 //(KIM)ユーザー情報を取得
 //////////////////////////////////////////////////////////////////////
 //(仮)ローカルにユーザー情報を作成
-var myLifestyle = new Schedule([], [], []);
 var mySchedule = new Schedule([], [], []);
-var mySettings = new Settings();
-var user = new User("山田太郎", myLifestyle, mySchedule, mySettings);
+var user = new User(null, null, null, null, mySchedule, null);
 //////////////////////////////////////////////////////////////////////
 
 //(KIM)データベースから他のタスクを取得し、Taskクラスの変換してScheduleクラスに格納

@@ -341,70 +341,76 @@ export class Schedule {
     }
   }
 
-  // all_tasksに全てのtaskを追加するモジュール (ここで, 分割した場合は統合する？)
-  // (子タスクの情報は親タスクから復元可能！ → 親タスクさえデータベースに格納しておいて, autoSchedulingで子タスクを展開すれば問題ない.)
-  returnAllTasks() {
-    var all_tasks = [];
-    for (var task of this.on_time) {
-      task_copy = Object.assign({}, task);
-      task_copy.required_time /= 1000 * 60 * 60;
-      task_copy.unit_time /= 1000 * 60 * 60;
-      if (task_copy.plan_or_task == 0) {
-        task_copy.plan_or_task = "Plan";
-      } else {
-        task_copy.plan_or_task = "Task";
-      }
-      if (task_copy.task_children.length > 0) {
-        task_copy.specified_time = [];
-        for (var child of task_copy.task_children) {
-          task_copy.specified_time.push(child.specified_time);
+    // all_tasksに全てのtaskを追加するモジュール (ここで, 分割した場合は統合する？) 
+    // (子タスクの情報は親タスクから復元可能！ → 親タスクさえデータベースに格納しておいて, autoSchedulingで子タスクを展開すれば問題ない.)
+    returnAllTasks() {
+        var all_tasks = [];
+        for (var task of this.on_time) {
+            let task_copy = Object.assign({}, task);
+            task_copy.required_time /= (1000 * 60 * 60);
+            task_copy.unit_time /= (1000 * 60 * 60);
+            if (task_copy.plan_or_task == 0) {
+                task_copy.plan_or_task = "Plan";
+            }
+            else {
+                task_copy.plan_or_task = "Task";
+            }
+            if (task_copy.task_children.length > 0) {
+                task_copy.specified_time = [];
+                for (var child of task_copy.task_children) {
+                    task_copy.specified_time.push(child.specified_time);
+                }
+            }
+            else {
+                task_copy.specified_time = [task_copy.specified_time];
+            }
+            all_tasks.push(task_copy);
         }
-      } else {
-        task_copy.OneArrayToTwoArray();
-      }
-      all_tasks.push(task_copy);
-    }
-    for (var task of this.auto_schedule) {
-      task_copy = Object.assign({}, task);
-      task_copy.required_time /= 1000 * 60 * 60;
-      task_copy.unit_time /= 1000 * 60 * 60;
-      if (task_copy.plan_or_task == 0) {
-        task_copy.plan_or_task = "Plan";
-      } else {
-        task_copy.plan_or_task = "Task";
-      }
-      if (task_copy.task_children.length > 0) {
-        task_copy.specified_time = [];
-        for (var child of task_copy.task_children) {
-          task_copy.specified_time.push(child.specified_time);
+        for (var task of this.auto_schedule) {
+            let task_copy = Object.assign({}, task);
+            task_copy.required_time /= (1000 * 60 * 60);
+            task_copy.unit_time /= (1000 * 60 * 60);
+            if (task_copy.plan_or_task == 0) {
+                task_copy.plan_or_task = "Plan";
+            }
+            else {
+                task_copy.plan_or_task = "Task";
+            }
+            if (task_copy.task_children.length > 0) {
+                task_copy.specified_time = [];
+                for (var child of task_copy.task_children) {
+                    task_copy.specified_time.push(child.specified_time);
+                }
+            }
+            else {
+                task_copy.specified_time = [task_copy.specified_time];
+            }
+            all_tasks.push(task_copy);
         }
-      } else {
-        task_copy.OneArrayToTwoArray();
-      }
-      all_tasks.push(task_copy);
-    }
-    for (var task of this.other) {
-      task_copy = Object.assign({}, task);
-      task_copy.required_time /= 1000 * 60 * 60;
-      task_copy.unit_time /= 1000 * 60 * 60;
-      if (task_copy.plan_or_task == 0) {
-        task_copy.plan_or_task = "Plan";
-      } else {
-        task_copy.plan_or_task = "Task";
-      }
-      if (task_copy.task_children.length > 0) {
-        task_copy.specified_time = [];
-        for (var child of task_copy.task_children) {
-          task_copy.specified_time.push(child.specified_time);
+        for (var task of this.other) {
+            task_copy = Object.assign({}, task);
+            task_copy.required_time /= (1000 * 60 * 60);
+            task_copy.unit_time /= (1000 * 60 * 60);
+            if (task_copy.plan_or_task == 0) {
+                task_copy.plan_or_task = "Plan";
+            }
+            else {
+                task_copy.plan_or_task = "Task";
+            }
+            if (task_copy.task_children.length > 0) {
+                task_copy.specified_time = [];
+                for (var child of task_copy.task_children) {
+                    task_copy.specified_time.push(child.specified_time);
+                }
+            }
+            else {
+                task_copy.specified_time = [task_copy.specified_time];
+            }
+            all_tasks.push(task_copy);
         }
-      } else {
-        task_copy.OneArrayToTwoArray();
-      }
-      all_tasks.push(task_copy);
-    }
 
-    return all_tasks;
-  }
+        return all_tasks;
+    }
 }
 
 // var myLifestyle = new Schedule([], [], []);
@@ -578,6 +584,7 @@ export class Schedule {
 // user1.schedule.addTask(tasks[0]);  // required_time < unit_time のケース
 // user1.schedule.addTask(tasks[1]);  // 指定時間が1箇所のケース
 // user1.schedule.addTask(tasks[2]);  // 指定時間が2箇所（例：1時限と5時限の授業を受ける）のケース
+
 // // user1.schedule.addTask(tasks[3]); // (締め切り過ぎる場合, 上手くいかない...(分割しても, 開始時間が全て同じになってしまう.))
 // user1.schedule.addTask(tasks[4]);  // 単位時間ごとに区切る
 // user1.schedule.addTask(tasks[5]);  // 日割り

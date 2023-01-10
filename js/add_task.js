@@ -9,10 +9,8 @@ import { uuidv4 } from "./create_uuid.js";
 //(KIM)ユーザー情報を取得
 //////////////////////////////////////////////////////////////////////
 //(仮)ローカルにユーザー情報を作成
-var myLifestyle = new Schedule([], [], []);
 var mySchedule = new Schedule([], [], []);
-var mySettings = new Settings();
-var user = new User("山田太郎", myLifestyle, mySchedule, mySettings);
+var user = new User(null, null, null, null, mySchedule, null);
 //////////////////////////////////////////////////////////////////////
 
 //main関数
@@ -29,6 +27,7 @@ document.getElementById("submit__btn").addEventListener("click", function () {
     //Scheduleクラスに格納
     user.schedule.addTask(new_task);
 
+    //all_tasksをaddTaskする
     all_tasks.forEach((e) => {
         user.schedule.addTask(e);
     });
@@ -38,8 +37,6 @@ document.getElementById("submit__btn").addEventListener("click", function () {
     console.log(updated_tasks);
     firebase_send(updated_tasks);
     //トップページに戻る
-    //トップページでデータベースからタスクを取得
-    //トップページでタスクを表示
     // window.location.href = '../constructor/index.html';
 });
 
@@ -51,7 +48,7 @@ function form_check(task) {
     );
     error_messages_container.innerHTML = "";
     error_number = 0;
-    var present_time = new Date();
+    var present_time = new Date().getTime();
 
     //nameが入力されているか
     if (task.name == "") {
@@ -61,6 +58,8 @@ function form_check(task) {
     //Taskのときのみ
     if (task.plan_or_task == "Task") {
         //deadlineが入力されているか、入力されている場合、現在時刻を越えていないか
+        console.log("asfdasdadasdsadsada");
+        console.log(task.deadline);
         if (Number.isNaN(task.deadline)) {
             error_message(`※締切日を入力してください。`);
         } else {
@@ -78,10 +77,33 @@ function form_check(task) {
     if (task.auto_scheduled == false) {
         var error_number_2 = 0;
 
-        for (const times of task.specified_time) {
-            //実施時間が入力されているか、現在時刻を越えていないか
+        if (task.days > 1) {
+            for (const times of task.specified_time) {
+                //実施時間が入力されているか、現在時刻を越えていないか
+                var error_number_3 = 0;
+                for (const time of times) {
+                    console.log(time);
+                    if (Number.isNaN(time.getTime())) {
+                        error_number_2 += 1;
+                        error_number_3 += 1;
+                    } else {
+                        if (time < present_time) {
+                            error_number_2 += 1;
+                            error_number_3 += 1;
+                        }
+                    }
+                }
+
+                //実施時間の順序は正しいか
+                if (error_number_3 == 0) {
+                    if (times[0] > times[1]) {
+                        error_number_2 += 1;
+                    }
+                }
+            }
+        } else {
             var error_number_3 = 0;
-            for (const time of times) {
+            for (const time of task.specified_time) {
                 if (Number.isNaN(time.getTime())) {
                     error_number_2 += 1;
                     error_number_3 += 1;
@@ -91,33 +113,37 @@ function form_check(task) {
                         error_number_3 += 1;
                     }
                 }
-            }
 
-            //実施時間の順序は正しいか
-            if (error_number_3 == 0) {
-                if (times[0] > times[1]) {
-                    error_number_2 += 1;
+
+                //実施時間の順序は正しいか
+                if (error_number_3 == 0) {
+                    if (time[0] > time[1]) {
+                        error_number_2 += 1;
+                    }
                 }
             }
         }
 
+
         //実施時間がすべて入力されている場合、それらに重複は無いか
-        if (error_number_2 == 0) {
-            task.specified_time.sort(function (a, b) {
-                return a[0] > b[0] ? 1 : -1;
-            });
+        if (task.days > 1) {
+            if (error_number_2 == 0) {
+                task.specified_time.sort(function (a, b) {
+                    return a[0] > b[0] ? 1 : -1;
+                });
 
-            var time_list = task.specified_time.flat();
-            var time_list_sorted = time_list.map((x) => x);
-            time_list_sorted.sort(function (a, b) {
-                return a > b ? 1 : -1;
-            });
+                var time_list = task.specified_time.flat();
+                var time_list_sorted = time_list.map((x) => x);
+                time_list_sorted.sort(function (a, b) {
+                    return a > b ? 1 : -1;
+                });
 
-            console.log(time_list);
-            console.log(time_list_sorted);
+                console.log(time_list);
+                console.log(time_list_sorted);
 
-            if (time_list.toString() != time_list_sorted.toString()) {
-                error_number_2 = -1;
+                if (time_list.toString() != time_list_sorted.toString()) {
+                    error_number_2 = -1;
+                }
             }
         }
 
@@ -170,9 +196,11 @@ function Plan_or_Task() {
 document.getElementById("auto_scheduling").onchange = AutoScheduling;
 function AutoScheduling() {
     if (document.getElementById("auto_scheduling").checked === true) {
+        document.getElementById("auto_scheduling_true").style.display = "";
         document.getElementById("number_of_imp_days").onchange = "";
         document.getElementById("imp_date__form--container").innerHTML = "";
     } else {
+        document.getElementById("auto_scheduling_true").style.display = "none";
         document.getElementById("number_of_imp_days").onchange = CreatingForm;
         CreatingForm();
     }
@@ -414,12 +442,13 @@ function get_new_task() {
     } else {
         var deadline_date = new Date(
             a["deadline_date"] + " " + a["deadline_hour"] + ":" + a["deadline_minute"]
-        );
+        ).getTime();
+        console.log("deadline_date:" + deadline_date);
         var required_time =
             new Number(a["len_hour"]) + new Number(a["len_minute"]) / 60;
     }
 
-    let new_specified_time = [[0, 0]];
+    let new_specified_time = null;
     if (a["auto_scheduling"] == false) {
         new_specified_time = [];
         for (var i = 1; i < Number(a["number_of_imp_days"]) + 1; i++) {
@@ -429,14 +458,14 @@ function get_new_task() {
                 a["imp_start_hour_" + String(i)] +
                 ":" +
                 a["imp_start_minute_" + String(i)]
-            );
+            ).getTime();
             var imp_end_date = new Date(
                 a["imp_date_" + String(i)] +
                 " " +
                 a["imp_end_hour_" + String(i)] +
                 ":" +
                 a["imp_end_minute_" + String(i)]
-            );
+            ).getTime();
             new_specified_time.push([imp_start_date, imp_end_date]);
         }
     }
@@ -455,7 +484,13 @@ function get_new_task() {
         required_time,
         Number(a["number_of_imp_days"]),
         a["auto_scheduling"],
-        new_specified_time
+        new_specified_time,
+        a["unit_time"],
+        null,
+        Number(a["importance"]),
+        a["place"],
+        a["color"],
+        true
     );
 
     console.log(new_specified_time);
