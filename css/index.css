@@ -44,6 +44,12 @@ header button a {
     color: #66A1FF;
 }
 
+main {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
 .main_content {
     padding: 25px 30px;
 }
@@ -95,4 +101,15 @@ header button a {
     width: 25px;
     right:15px;
     top: 13px;
+}
+
+.main_content {
+    width: 25%;
+    box-sizing: border-box;
+}
+
+.calendar {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
