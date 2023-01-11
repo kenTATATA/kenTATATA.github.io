@@ -81,17 +81,6 @@ if (edit_page == true) {
 //main関数
 //確定ボタンが押されたときの処理
 document.getElementById("submit__btn").addEventListener("click", function () {
-    //新しいタスクのデータをフォームから取得し、Taskクラスに変換
-    var new_task = get_new_task();
-    console.log(new_task);
-    //タスクの入力内容の妥当性を判断
-    if (form_check(new_task) == false) {
-        console.log("フォームエラー");
-        return;
-    }
-    //Scheduleクラスに格納
-    user.schedule.addTask(new_task);
-
     //all_tasksをaddTaskする
     all_tasks.forEach((e) => {
         if (edit_page == true) {
@@ -104,6 +93,18 @@ document.getElementById("submit__btn").addEventListener("click", function () {
             user.schedule.addTask(e);
         }
     });
+    //新しいタスクのデータをフォームから取得し、Taskクラスに変換
+    var new_task = get_new_task();
+    console.log(new_task);
+    //タスクの入力内容の妥当性を判断
+    if (form_check(new_task) == false) {
+        console.log("フォームエラー");
+        return;
+    }
+    //Scheduleクラスに格納
+    user.schedule.addTask(new_task);
+
+    
 
     //(KIM)Scheduleクラスのall_tasksのタスクをデータベースに格納
     let updated_tasks = user.schedule.returnAllTasks();
@@ -591,7 +592,7 @@ function get_new_task() {
         Number(a["number_of_imp_days"]),
         a["auto_scheduling"],
         new_specified_time,
-        a["unit_time"],
+        Number(a["unit_time"])/60,
         null,
         Number(a["importance"]),
         a["place"],
