@@ -20,62 +20,65 @@ const edit_page = ref.endsWith("detail.html");
 
 //遷移元がdetail.htmlだった場合
 if (edit_page == true) {
-    //タイトル変更
-    document.getElementById("title_new").style.display = "none";
-    document.getElementById("title_edit").style.display = "";
-    // 選択されたタスクを取得
-    var selected_task_id = window.sessionStorage.getItem(["selected_task_id"]);
-    var selected_task = "";
-    for (const task of all_tasks) {
-        if (task.id == selected_task_id) {
-            var selected_task = task;
-        }
+  //タイトル変更
+  document.getElementById("title_new").style.display = "none";
+  document.getElementById("title_edit").style.display = "";
+  // 選択されたタスクを取得
+  var selected_task_id = window.sessionStorage.getItem(["selected_task_id"]);
+  var selected_task = "";
+  for (const task of all_tasks) {
+    if (task.id == selected_task_id) {
+      var selected_task = task;
     }
+  }
 
-    // Taskを配列に変換
-    let a = taskToArray(selected_task);
-    console.log(a);
+  // Taskを配列に変換
+  let a = taskToArray(selected_task);
+  console.log(a);
 
-    if (selected_task) {
-        // フォームを自動入力する
-        document.getElementById("plan_or_task").value = a.plan_or_task;
-        Plan_or_Task();
-        document.getElementById("title").value = a.title;
-        // 予定かタスクか
-        if (a.plan_or_task == "Task") {
-            document.getElementById("deadline_date").value = a.deadline_date;
-            document.getElementById("deadline_hour").value = a.deadline_hour;
-            document.getElementById("deadline_minute").value = a.deadline_minute;
-            document.getElementById("len_hour").value = a.len_hour;
-            document.getElementById("len_minute").value = a.len_minute;
-        }
-        document.getElementById("auto_scheduling").checked = a.auto_scheduling;
-        document.getElementById("number_of_imp_days").value = a.number_of_children;
-        AutoScheduling();
-        // 自動スケジューリングするか
-        if (a.auto_scheduling == false) {
-            for (var i = 1; i < a.number_of_children + 1; i++) {
-                document.getElementById("imp_date_" + i).value = a["imp_date_" + i];
-                document.getElementById("imp_start_hour_" + i).value = a["imp_start_hour_" + i];
-                document.getElementById("imp_start_minute_" + i).value = a["imp_start_minute_" + i];
-                document.getElementById("imp_end_hour_" + i).value = a["imp_end_hour_" + i];
-                document.getElementById("imp_end_minute_" + i).value = a["imp_end_minute_" + i];
-            }
-        } else {
-            document.getElementById("importance").value = a.importance;
-            document.getElementById("unit_time").value = a.unit_time;
-        }
-        document.getElementById("task_duplication").checked = a.task_duplication;
-        document.getElementById("overview").value = a.overview;
-        document.getElementById("category").value = a.category;
-        document.getElementById("place").value = a.place;
-        document.getElementById("color").value = a.color;
-        document.getElementById("favorite").checked = a.favorite;
+  if (selected_task) {
+    // フォームを自動入力する
+    document.getElementById("plan_or_task").value = a.plan_or_task;
+    Plan_or_Task();
+    document.getElementById("title").value = a.title;
+    // 予定かタスクか
+    if (a.plan_or_task == "Task") {
+      document.getElementById("deadline_date").value = a.deadline_date;
+      document.getElementById("deadline_hour").value = a.deadline_hour;
+      document.getElementById("deadline_minute").value = a.deadline_minute;
+      document.getElementById("len_hour").value = a.len_hour;
+      document.getElementById("len_minute").value = a.len_minute;
+    }
+    document.getElementById("auto_scheduling").checked = a.auto_scheduling;
+    document.getElementById("number_of_imp_days").value = a.number_of_children;
+    AutoScheduling();
+    // 自動スケジューリングするか
+    if (a.auto_scheduling == false) {
+      for (var i = 1; i < a.number_of_children + 1; i++) {
+        document.getElementById("imp_date_" + i).value = a["imp_date_" + i];
+        document.getElementById("imp_start_hour_" + i).value =
+          a["imp_start_hour_" + i];
+        document.getElementById("imp_start_minute_" + i).value =
+          a["imp_start_minute_" + i];
+        document.getElementById("imp_end_hour_" + i).value =
+          a["imp_end_hour_" + i];
+        document.getElementById("imp_end_minute_" + i).value =
+          a["imp_end_minute_" + i];
+      }
     } else {
-        console.log("selected_taskがないエラーが発生しました");
-        window.location.href = '../constructor/index.html';
+      document.getElementById("importance").value = a.importance;
+      document.getElementById("unit_time").value = a.unit_time;
     }
-
+    document.getElementById("task_duplication").checked = a.task_duplication;
+    document.getElementById("overview").value = a.overview;
+    document.getElementById("category").value = a.category;
+    document.getElementById("place").value = a.place;
+    document.getElementById("color").value = a.color;
+    document.getElementById("favorite").checked = a.favorite;
+  } else {
+    console.log("selected_taskがないエラーが発生しました");
+    window.location.href = "../constructor/index.html";
+  }
 }
 
 //main関数
@@ -104,12 +107,10 @@ document.getElementById("submit__btn").addEventListener("click", function () {
     //Scheduleクラスに格納
     user.schedule.addTask(new_task);
 
-    
-
     //(KIM)Scheduleクラスのall_tasksのタスクをデータベースに格納
     let updated_tasks = user.schedule.returnAllTasks();
     console.log("update_task", updated_tasks);
-    firebase_send(updated_tasks);
+     firebase_send(updated_tasks, edit_page);
     // 同期処理がダメだ
     // if(edit_page==true){
     //     window.location.href = '../constructor/detail.html';
@@ -121,200 +122,199 @@ document.getElementById("submit__btn").addEventListener("click", function () {
 //フォームチェック：入力内容に問題があればfalseを出力、メッセージを表示
 var error_number = 0;
 function form_check(task) {
-    var error_messages_container = document.getElementById(
-        "error_messages_container"
-    );
-    error_messages_container.innerHTML = "";
-    error_number = 0;
-    var present_time = new Date().getTime();
+  var error_messages_container = document.getElementById(
+    "error_messages_container"
+  );
+  error_messages_container.innerHTML = "";
+  error_number = 0;
+  var present_time = new Date().getTime();
 
-    //nameが入力されているか
-    if (task.name == "") {
-        error_message(`※タスク名を入力してください。`);
-    }
+  //nameが入力されているか
+  if (task.name == "") {
+    error_message(`※タスク名を入力してください。`);
+  }
 
-    //Taskのときのみ
-    if (task.plan_or_task == 1) {
-        //deadlineが入力されているか、入力されている場合、現在時刻を越えていないか
-        console.log(task.deadline);
-        if (Number.isNaN(task.deadline)) {
-            error_message(`※締切日を入力してください。`);
-        } else {
-            if (task.deadline < present_time) {
-                error_message(`※締切日を過ぎています。`);
-            }
-
-            //required_timeが入力されているか
-            if (task.required_time == 0) {
-                error_message(`※推定予定時間を入力してください。`);
-            }
-        }
-    }
-
-    //auto_scheduledがfalseのとき
-    //ワンちゃんダメ
-    if (task.auto_scheduled == false) {
-        var error_number_2 = 0;
-
-        // for (let child of task.task_children) {
-        //     //実施時間が入力されているか、現在時刻を越えていないか
-        //     var error_number_3 = 0;
-        //     for (const time of child.specified_time) {
-        //         if (time == null) {
-        //             error_number_2 += 1;
-        //             error_number_3 += 1;
-        //         } else {
-        //             if (time < present_time) {
-        //                 error_number_2 += 1;
-        //                 error_number_3 += 1;
-        //             }
-        //         }
-        //     }
-
-        //     //実施時間の順序は正しいか
-        //     if (error_number_3 == 0) {
-        //         if (child.specified_time[0] > child.specified_time[1]) {
-        //             error_number_2 += 1;
-        //         }
-        //     }
-        // }
-
-        if (task.days > 1) {
-            for (const times of task.specified_time) {
-                //実施時間が入力されているか、現在時刻を越えていないか
-                var error_number_3 = 0;
-                for (const time of times) {
-                    console.log(time);
-                    if (Number.isNaN(time)) {
-                        error_number_2 += 1;
-                        error_number_3 += 1;
-                    } else {
-                        if (time < present_time) {
-                            error_number_2 += 1;
-                            error_number_3 += 1;
-                        }
-                    }
-                }
-
-                //実施時間の順序は正しいか
-                if (error_number_3 == 0) {
-                    if (times[0] > times[1]) {
-                        error_number_2 += 1;
-                    }
-                }
-            }
-        } else {
-            var error_number_3 = 0;
-            for (const time of task.specified_time) {
-                if (Number.isNaN(time)) {
-                    error_number_2 += 1;
-                    error_number_3 += 1;
-                } else {
-                    if (time < present_time) {
-                        error_number_2 += 1;
-                        error_number_3 += 1;
-                    }
-                }
-
-
-                //実施時間の順序は正しいか
-                if (error_number_3 == 0) {
-                    if (time[0] > time[1]) {
-                        error_number_2 += 1;
-                    }
-                }
-            }
-        }
-
-        //実施時間がすべて入力されている場合、それらに重複は無いか
-        if (error_number_2 == 0) {
-            task.task_children.sort(function (a, b) {
-                return a.specified_time[0] > b.specified_time[0] ? 1 : -1;
-            });
-
-            var time_list = [];
-            for (let child of task.task_children) {
-                time_list.push(child.specified_time[0]);
-                time_list.push(child.specified_time[1]);
-            }
-            var time_list_sorted = time_list.map((x) => x);
-            time_list_sorted.sort(function (a, b) {
-                return a > b ? 1 : -1;
-            });
-
-            if (time_list.toString() != time_list_sorted.toString()) {
-                error_number_2 = -1;
-            }
-        }
-
-        if (error_number_2 > 0) {
-            error_message(`※実施時間を正しく入力してください。`);
-        } else if (error_number_2 < 0) {
-            error_message(`※実施時間が重複しています。`);
-        }
-    }
-
-    if (error_number == 0) {
-        console.log(true);
-        return true;
+  //Taskのときのみ
+  if (task.plan_or_task == 1) {
+    //deadlineが入力されているか、入力されている場合、現在時刻を越えていないか
+    console.log(task.deadline);
+    if (Number.isNaN(task.deadline)) {
+      error_message(`※締切日を入力してください。`);
     } else {
-        console.log(false);
-        return false;
+      if (task.deadline < present_time) {
+        error_message(`※締切日を過ぎています。`);
+      }
+
+      //required_timeが入力されているか
+      if (task.required_time == 0) {
+        error_message(`※推定予定時間を入力してください。`);
+      }
     }
+  }
+
+  //auto_scheduledがfalseのとき
+  //ワンちゃんダメ
+  if (task.auto_scheduled == false) {
+    var error_number_2 = 0;
+
+    // for (let child of task.task_children) {
+    //     //実施時間が入力されているか、現在時刻を越えていないか
+    //     var error_number_3 = 0;
+    //     for (const time of child.specified_time) {
+    //         if (time == null) {
+    //             error_number_2 += 1;
+    //             error_number_3 += 1;
+    //         } else {
+    //             if (time < present_time) {
+    //                 error_number_2 += 1;
+    //                 error_number_3 += 1;
+    //             }
+    //         }
+    //     }
+
+    //     //実施時間の順序は正しいか
+    //     if (error_number_3 == 0) {
+    //         if (child.specified_time[0] > child.specified_time[1]) {
+    //             error_number_2 += 1;
+    //         }
+    //     }
+    // }
+
+    if (task.days > 1) {
+      for (const times of task.specified_time) {
+        //実施時間が入力されているか、現在時刻を越えていないか
+        var error_number_3 = 0;
+        for (const time of times) {
+          console.log(time);
+          if (Number.isNaN(time)) {
+            error_number_2 += 1;
+            error_number_3 += 1;
+          } else {
+            if (time < present_time) {
+              error_number_2 += 1;
+              error_number_3 += 1;
+            }
+          }
+        }
+
+        //実施時間の順序は正しいか
+        if (error_number_3 == 0) {
+          if (times[0] > times[1]) {
+            error_number_2 += 1;
+          }
+        }
+      }
+    } else {
+      var error_number_3 = 0;
+      for (const time of task.specified_time) {
+        if (Number.isNaN(time)) {
+          error_number_2 += 1;
+          error_number_3 += 1;
+        } else {
+          if (time < present_time) {
+            error_number_2 += 1;
+            error_number_3 += 1;
+          }
+        }
+
+        //実施時間の順序は正しいか
+        if (error_number_3 == 0) {
+          if (time[0] > time[1]) {
+            error_number_2 += 1;
+          }
+        }
+      }
+    }
+
+    //実施時間がすべて入力されている場合、それらに重複は無いか
+    if (error_number_2 == 0) {
+      task.task_children.sort(function (a, b) {
+        return a.specified_time[0] > b.specified_time[0] ? 1 : -1;
+      });
+
+      var time_list = [];
+      for (let child of task.task_children) {
+        time_list.push(child.specified_time[0]);
+        time_list.push(child.specified_time[1]);
+      }
+      var time_list_sorted = time_list.map((x) => x);
+      time_list_sorted.sort(function (a, b) {
+        return a > b ? 1 : -1;
+      });
+
+      if (time_list.toString() != time_list_sorted.toString()) {
+        error_number_2 = -1;
+      }
+    }
+
+    if (error_number_2 > 0) {
+      error_message(`※実施時間を正しく入力してください。`);
+    } else if (error_number_2 < 0) {
+      error_message(`※実施時間が重複しています。`);
+    }
+  }
+
+  if (error_number == 0) {
+    console.log(true);
+    return true;
+  } else {
+    console.log(false);
+    return false;
+  }
 }
 
 //フォームチェックでエラーメッセージを表示する関数
 function error_message(message) {
-    error_number += 1;
-    var message_container = document.createElement("p");
-    message_container.innerHTML = message;
-    error_messages_container.appendChild(message_container);
+  error_number += 1;
+  var message_container = document.createElement("p");
+  message_container.innerHTML = message;
+  error_messages_container.appendChild(message_container);
 }
 
 //フォームの動的化：タスクか予定か
 document.getElementById("plan_or_task").onchange = Plan_or_Task;
 function Plan_or_Task() {
-    if (document.getElementById("plan_or_task")) {
-        var Plan_or_Task = document.getElementById("plan_or_task").value;
-        if (Plan_or_Task == "Plan") {
-            document.getElementById("deadline_form").style.display = "none";
-            document.getElementById("len_form").style.display = "none";
-            document.getElementById("auto_scheduling_form").style.display = "none";
-            document.getElementById("auto_scheduling").checked = false;
-            AutoScheduling();
-        } else if (Plan_or_Task == "Task") {
-            document.getElementById("deadline_form").style.display = "";
-            document.getElementById("len_form").style.display = "";
-            document.getElementById("auto_scheduling_form").style.display = "";
-            document.getElementById("auto_scheduling").checked = true;
-            AutoScheduling();
-        }
+  if (document.getElementById("plan_or_task")) {
+    var Plan_or_Task = document.getElementById("plan_or_task").value;
+    if (Plan_or_Task == "Plan") {
+      document.getElementById("deadline_form").style.display = "none";
+      document.getElementById("len_form").style.display = "none";
+      document.getElementById("auto_scheduling_form").style.display = "none";
+      document.getElementById("auto_scheduling").checked = false;
+      AutoScheduling();
+    } else if (Plan_or_Task == "Task") {
+      document.getElementById("deadline_form").style.display = "";
+      document.getElementById("len_form").style.display = "";
+      document.getElementById("auto_scheduling_form").style.display = "";
+      document.getElementById("auto_scheduling").checked = true;
+      AutoScheduling();
     }
+  }
 }
 
 //フォームの動的化：AutoSchedulingがオンのときにフォームを消す
 document.getElementById("auto_scheduling").onchange = AutoScheduling;
 function AutoScheduling() {
-    if (document.getElementById("auto_scheduling").checked === true) {
-        document.getElementById("auto_scheduling_true").style.display = "";
-        document.getElementById("number_of_imp_days").onchange = "";
-        document.getElementById("imp_date__form--container").innerHTML = "";
-    } else {
-        document.getElementById("auto_scheduling_true").style.display = "none";
-        document.getElementById("number_of_imp_days").onchange = CreatingForm;
-        CreatingForm();
-    }
+  if (document.getElementById("auto_scheduling").checked === true) {
+    document.getElementById("auto_scheduling_true").style.display = "";
+    document.getElementById("number_of_imp_days").onchange = "";
+    document.getElementById("imp_date__form--container").innerHTML = "";
+  } else {
+    document.getElementById("auto_scheduling_true").style.display = "none";
+    document.getElementById("number_of_imp_days").onchange = CreatingForm;
+    CreatingForm();
+  }
 }
 
 //フォームの動的化：number_of_imp_days分だけフォームを作成
 document.getElementById("number_of_imp_days").onchange = CreatingForm;
 function CreatingForm() {
-    var n = Number(document.getElementById("number_of_imp_days").value);
-    document.getElementById("imp_date__form--container").innerHTML = "";
-    for (var i = 1; i < n + 1; i++) {
-        var imp_date__form = document.createElement("div");
-        imp_date__form.setAttribute("name", "imp_date__form_" + String(i));
-        imp_date__form.innerHTML = `
+  var n = Number(document.getElementById("number_of_imp_days").value);
+  document.getElementById("imp_date__form--container").innerHTML = "";
+  for (var i = 1; i < n + 1; i++) {
+    var imp_date__form = document.createElement("div");
+    imp_date__form.setAttribute("name", "imp_date__form_" + String(i));
+    imp_date__form.innerHTML = `
         <h5>実施時間${i}</h5>
         <input name="imp_date_${i}" id="imp_date_${i}" type="date"></input>
         <br />
@@ -498,85 +498,85 @@ function CreatingForm() {
             <option value="59">59</option>
         </select>分<br />
             `;
-        document
-            .getElementById("imp_date__form--container")
-            .appendChild(imp_date__form);
-    }
+    document
+      .getElementById("imp_date__form--container")
+      .appendChild(imp_date__form);
+  }
 }
 
 // 新しいタスクのデータをフォームから取得し、Taskクラスの形で返す関数
 function get_new_task() {
-    const formElements = document.forms.add_task__form;
-    var a = {};
+  const formElements = document.forms.add_task__form;
+  var a = {};
 
-    var input_array = formElements.getElementsByTagName("input");
-    var select_array = formElements.getElementsByTagName("select");
-    var textarea_array = formElements.getElementsByTagName("textarea");
+  var input_array = formElements.getElementsByTagName("input");
+  var select_array = formElements.getElementsByTagName("select");
+  var textarea_array = formElements.getElementsByTagName("textarea");
 
-    for (var i = 0; i < input_array.length; i++) {
-        var item = input_array.item(i);
-        if (item.type == "checkbox") {
-            if (item.checked === true) {
-                a[item.name] = true;
-            } else {
-                a[item.name] = false;
-            }
-        } else {
-            a[item.name] = item.value;
-        }
-    }
-
-    for (var i = 0; i < select_array.length; i++) {
-        var item = select_array.item(i);
-        a[item.name] = item.value;
-    }
-
-    for (var i = 0; i < textarea_array.length; i++) {
-        var item = textarea_array.item(i);
-        a[item.name] = item.value;
-    }
-
-    if (a["plan_or_task"] == "Plan") {
-        var deadline_date = null;
-        var required_time = null;
+  for (var i = 0; i < input_array.length; i++) {
+    var item = input_array.item(i);
+    if (item.type == "checkbox") {
+      if (item.checked === true) {
+        a[item.name] = true;
+      } else {
+        a[item.name] = false;
+      }
     } else {
-        var deadline_date = new Date(
-            a["deadline_date"] + " " + a["deadline_hour"] + ":" + a["deadline_minute"]
-        ).getTime();
-        console.log("deadline_date:" + deadline_date);
-        var required_time =
-            new Number(a["len_hour"]) + new Number(a["len_minute"]) / 60;
+      a[item.name] = item.value;
     }
+  }
 
-    let new_specified_time = null;
-    if (a["auto_scheduling"] == false) {
-        new_specified_time = [];
-        for (var i = 1; i < Number(a["number_of_imp_days"]) + 1; i++) {
-            var imp_start_date = new Date(
-                a["imp_date_" + String(i)] +
-                " " +
-                a["imp_start_hour_" + String(i)] +
-                ":" +
-                a["imp_start_minute_" + String(i)]
-            ).getTime();
-            var imp_end_date = new Date(
-                a["imp_date_" + String(i)] +
-                " " +
-                a["imp_end_hour_" + String(i)] +
-                ":" +
-                a["imp_end_minute_" + String(i)]
-            ).getTime();
-            new_specified_time.push([imp_start_date, imp_end_date]);
-        }
-    }
-    console.log(new_specified_time);
+  for (var i = 0; i < select_array.length; i++) {
+    var item = select_array.item(i);
+    a[item.name] = item.value;
+  }
 
-    let task_id;
-    if (edit_page == true) {
-        task_id = selected_task.id;
-    } else {
-        task_id = uuidv4();
+  for (var i = 0; i < textarea_array.length; i++) {
+    var item = textarea_array.item(i);
+    a[item.name] = item.value;
+  }
+
+  if (a["plan_or_task"] == "Plan") {
+    var deadline_date = null;
+    var required_time = null;
+  } else {
+    var deadline_date = new Date(
+      a["deadline_date"] + " " + a["deadline_hour"] + ":" + a["deadline_minute"]
+    ).getTime();
+    console.log("deadline_date:" + deadline_date);
+    var required_time =
+      new Number(a["len_hour"]) + new Number(a["len_minute"]) / 60;
+  }
+
+  let new_specified_time = null;
+  if (a["auto_scheduling"] == false) {
+    new_specified_time = [];
+    for (var i = 1; i < Number(a["number_of_imp_days"]) + 1; i++) {
+      var imp_start_date = new Date(
+        a["imp_date_" + String(i)] +
+          " " +
+          a["imp_start_hour_" + String(i)] +
+          ":" +
+          a["imp_start_minute_" + String(i)]
+      ).getTime();
+      var imp_end_date = new Date(
+        a["imp_date_" + String(i)] +
+          " " +
+          a["imp_end_hour_" + String(i)] +
+          ":" +
+          a["imp_end_minute_" + String(i)]
+      ).getTime();
+      new_specified_time.push([imp_start_date, imp_end_date]);
     }
+  }
+  console.log(new_specified_time);
+
+  let task_id;
+  if (edit_page == true) {
+    task_id = selected_task.id;
+  } else {
+    task_id = uuidv4();
+  }
 
     const new_task = new Task(
         task_id,
@@ -606,9 +606,9 @@ function get_new_task() {
 
 //キャンセルボタン
 document.getElementById("cancel__btn").addEventListener("click", function () {
-    if (edit_page == true) {
-        window.location.href = '../constructor/detail.html';
-    } else {
-        window.location.href = '../constructor/index.html';
-    }
+  if (edit_page == true) {
+    window.location.href = "../constructor/detail.html";
+  } else {
+    window.location.href = "../constructor/index.html";
+  }
 });

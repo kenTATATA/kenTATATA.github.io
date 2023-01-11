@@ -24,7 +24,9 @@ const test_add_btn = document.getElementById("test_add");
 // document.getElementById("time").innerHTML = docsnap.data().予定;
 // document.getElementById("schedule").innerHTML = docs nap.data().時間;
 
-export function firebase_send(AllTask) {
+let promiseCount = 0;
+
+export function firebase_send(AllTask, edit_page) {
   let docData = {};
   AllTask.forEach((e) => {
     console.log(AllTask);
@@ -58,7 +60,20 @@ export function firebase_send(AllTask) {
       docData[e.id].push(e.specified_time[0]);
       docData[e.id].push(e.specified_time[1]);
     });
-    setDoc(doc(db, "userData", user_id), docData);
+    setDoc(doc(db, "userData", user_id), docData)
+      .then(() => {
+        promiseCount++;
+        if (promiseCount == AllTask.length) {
+          if (edit_page == true) {
+            window.location.href = "../constructor/detail.html";
+          } else {
+            window.location.href = "../constructor/index.html";
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     console.log(e);
   });
 }
