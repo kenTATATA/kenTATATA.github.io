@@ -3,7 +3,8 @@ import { Task } from "../js/class_Task.js";
 import { User } from "../js/class_User.js";
 import { Schedule } from "../js/class_Schedule.js";
 import { Settings } from "../js/class_Settings.js";
-import { timestampToDisplay } from "../js/common.js";
+import { timestampToDisplay, colorChange } from "../js/common.js";
+import { firebase_send } from "./data_send.js";
 
 //(KIM)ユーザー情報を取得
 //////////////////////////////////////////////////////////////////////
@@ -21,12 +22,18 @@ all_tasks.sort(function (a, b) {
 });
 for (const task of all_tasks) {
   if (task.valid == true) {
+    var task_container_container = document.createElement("div");
     var task_container = document.createElement("div");
+    var checkbox_container = document.createElement("div");
     task_container.setAttribute("id", task.id.toString());
+    task_container_container.classList.add("task_container_container");
     task_container.classList.add("task_container");
+    checkbox_container.classList.add("checkbox_container");
     task_container.innerHTML = `
         <h5>${task.name}</h5>
             `;
+
+    //お気に入り
     if (task.favorite == true) {
       task_container.innerHTML += `
     <img class="star" src="../img/star.png" />
@@ -50,18 +57,77 @@ for (const task of all_tasks) {
        `;
     }
 
-    document.getElementById("task_list_container").appendChild(task_container);
+    task_container_container.style.backgroundColor = colorChange(task.color);
+    task_container_container.appendChild(task_container);
+
+    //完了
+    if (task.finished == false) {
+      checkbox_container.innerHTML += `
+    <input type="checkbox" class="checkbox_finished" id="${task.id}_finished"/>
+                      `;
+    } else {
+      checkbox_container.innerHTML += `
+    <input type="checkbox" class="checkbox_finished" id="${task.id}_finished" checked/>
+                      `;
+    }
+    task_container_container.appendChild(checkbox_container);
+
+    if (task.finished == false) {
+      document.getElementById("task_list_container").appendChild(task_container_container);
+    } else {
+      document.getElementById("finished_task_list_container").appendChild(task_container_container);
+    }
+
   }
 
 }
-//詳細ボタンがクリックされたときに、セッションにそのタスクidを保存してから、detail.htmlへ移動
+
 for (const task of all_tasks) {
   if (task.valid == true) {
+    //詳細ボタンがクリックされたときに、セッションにそのタスクidを保存してから、detail.htmlへ移動
     document
       .getElementById(task.id.toString())
       .addEventListener("click", function () {
         window.sessionStorage.setItem(["selected_task_id"], [task.id.toString()]);
         window.location.href = "../constructor/detail.html";
       });
+
+    //完了処理
+    document
+      .getElementById(task.id.toString() + "_finished")
+      .addEventListener("click", function () {
+        if (document.getElementById(task.id.toString() + "_finished").checked) {
+          task.finished = true;
+        } else {
+          task.finished = false;
+        }
+        firebase_send(all_tasks);
+      });
   }
 }
+
+// //完了処理
+// for (const task of all_tasks) {
+//   if (task.valid == true) {
+//     // document
+//     //   .getElementById(task.id.toString() + "_finished")
+//     //   .addEventListener("mouseenter", function () {
+//     //     document.getElementById(task.id.toString()).style.cursor = "none";
+//     //   });
+
+//     // document
+//     //   .getElementById(task.id.toString() + "_finished")
+//     //   .addEventListener("mouseleave", function () {
+//     //     document.getElementById(task.id.toString()).style.cursor = "pointer";
+//     //   });
+
+//     document
+//       .getElementById(task.id.toString() + "_finished")
+//       .addEventListener("click", function () {
+//         task.finished = document
+//           .getElementById(task.id.toString() + "_finished")
+//           .value;
+//         firebase_send(updated_tasks);
+//       });
+//   }
+// }

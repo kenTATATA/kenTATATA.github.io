@@ -164,7 +164,6 @@ if (selected_task) {
     if (window.confirm("本当に削除しますか？")) {
       selected_task.valid = false;
       firebase_send(all_tasks);
-      // window.location.href = '../constructor/index.html';
     }
   });
 
