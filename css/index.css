@@ -79,7 +79,6 @@ h2 {
 
 .task_container_container {
     position: relative;
-    width: 80%;
     margin-top: 10px;
     border-radius: 8px;
 }
@@ -97,6 +96,7 @@ h2 {
     font-size: 15px;
     font-weight: 500;
     margin: 0 0 5px 0;
+    color: #4d5156;
 }
 
 .task_container p {
@@ -121,9 +121,10 @@ h2 {
 .checkbox_finished {
     scale: 1.4;
     margin:0;
+}
 
 .main_content {
-    width: 25%;
+    width: 340px;
     box-sizing: border-box;
 }
 
