@@ -1,5 +1,6 @@
-import { FullCalendar } from "../dist/index.global.js"
+import { FullCalendar } from "../dist/index.global.js";
 import { all_tasks } from "./get_tasks.js";
+import { timestampToDisplay } from "./common.js";
 
 class DrawCalendar{
     constructor(all_tasks) {
@@ -36,6 +37,53 @@ class DrawCalendar{
                         event.color = "darkgray";
                     
                 }
+                switch (child.repeat_unit) {
+                    case "day":
+                        var titleText = event.title;
+                        event.title = "";
+                        for (var i = 0; i < titleText.length; i++) {
+                            if (titleText.charAt(i) == "/") {  // この文字なら (滅多に) 使わないはず...
+                                break;
+                            }
+                            event.title += titleText.charAt(i);
+                        }
+                        event.title = event.title.slice(0, event.title.length - 2);  // (1/1)のような部分をなくす.
+                        event.daysOfWeek = [0, 1, 2, 3, 4, 5, 6];
+                        event.allDay = false;
+                        var timeStamp_Start = timestampToDisplay(event.start, 2);
+                        var timeStamp_End = timestampToDisplay(event.end, 2);
+                        event.startTime = timeStamp_Start.hour + ":" + timeStamp_Start.minute + ":" + "00";
+                        event.endTime = timeStamp_End.hour + ":" + timeStamp_End.minute + ":" + "00";
+                        event.color = "pink";
+                        console.log("毎日");
+                        break;
+                    case "week":
+                        var titleText = event.title;
+                        event.title = "";
+                        for (var i = 0; i < titleText.length; i++) {
+                            if (titleText.charAt(i) == "/") {  // この文字なら (滅多に) 使わないはず...
+                                break;
+                            }
+                            event.title += titleText.charAt(i);
+                        }
+                        event.title = event.title.slice(0, event.title.length - 2);  // (1/1)のような部分をなくす.
+                        event.daysOfWeek = [(new Date(child.specified_time[0])).getDay()];
+                        event.allDay = false;
+                        var timeStamp_Start = timestampToDisplay(event.start, 2);
+                        var timeStamp_End = timestampToDisplay(event.end, 2);
+                        event.startTime = timeStamp_Start.hour + ":" + timeStamp_Start.minute + ":" + "00";
+                        event.endTime = timeStamp_End.hour + ":" + timeStamp_End.minute + ":" + "00";
+                        event.color = "red";  // 見やすい色に
+                        console.log("毎週");
+                        break;
+                    case "month":
+                        break;
+                    case "year":
+                          break;
+                    default:
+                          break;
+                }
+                
                 tasks.push(event);
             }
         }
