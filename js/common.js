@@ -111,6 +111,6 @@ export function colorChange(color) {
         case "purple":
             return "#D0DFF9";
         default:
-            return "#000000";  // 真っ黒
+            return "#777777";  // 真っ黒
     }
 }
