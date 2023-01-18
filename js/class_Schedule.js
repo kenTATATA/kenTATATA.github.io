@@ -234,6 +234,7 @@ export class Schedule {
         times.sort(function (a, b) {
             return a[0] < b[0] ? -1 : 1;
         });
+
         for (var event of this.auto_schedule) {
             if (event.finished == true) {
                 continue;

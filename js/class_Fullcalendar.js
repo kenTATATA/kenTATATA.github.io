@@ -55,7 +55,6 @@ class DrawCalendar{
                         event.startTime = timeStamp_Start.hour + ":" + timeStamp_Start.minute + ":" + "00";
                         event.endTime = timeStamp_End.hour + ":" + timeStamp_End.minute + ":" + "00";
                         event.color = "pink";
-                        console.log("毎日");
                         break;
                     case "week":
                         var titleText = event.title;
@@ -73,8 +72,7 @@ class DrawCalendar{
                         var timeStamp_End = timestampToDisplay(event.end, 2);
                         event.startTime = timeStamp_Start.hour + ":" + timeStamp_Start.minute + ":" + "00";
                         event.endTime = timeStamp_End.hour + ":" + timeStamp_End.minute + ":" + "00";
-                        event.color = "red";  // 見やすい色に
-                        console.log("毎週");
+                        event.color = "green";  // 見やすい色に
                         break;
                     case "month":
                         break;

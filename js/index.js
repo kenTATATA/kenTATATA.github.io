@@ -13,6 +13,9 @@ var mySchedule = new Schedule([], [], []);
 var user = new User(null, null, null, null, mySchedule, null);
 //////////////////////////////////////////////////////////////////////
 
+// 締め切り過ぎたタスクがあるかどうか
+var deadlineOver = false;
+
 //未完了タスクの一覧表示
 //Taskの配列から表示
 document.getElementById("task_list_container").innerHTML = "";
@@ -32,6 +35,21 @@ for (const task of all_tasks) {
     task_container.innerHTML = `
         <h5>${task.name}</h5>
             `;
+
+    console.log(task.task_children[task.task_children.length - 1]);
+    
+    // 締め切りを過ぎたタスクがどれかを分かるようにする.
+    if (task.deadline != null) {
+      if (task.task_children[task.task_children.length - 1].specified_time[1] > task.deadline) {
+        task_container.innerHTML += `
+            <h5> (締め切り過ぎたタスク) </h5>
+                `;
+        deadlineOver = true;
+      }
+    }
+    
+
+    console.log(task.name + " " + task.color);
 
     //お気に入り
     if (task.favorite == true) {
@@ -163,6 +181,13 @@ for (const task of all_tasks) {
         firebase_send(all_tasks);
       });
   }
+}
+
+// 締め切りを過ぎているタスクがある場合には, 警告メッセージを出す.
+// スケジュールの変更を促す.
+// (果たして, このやり方でユーザは満足するだろうか...)
+if (deadlineOver) {
+     alert("締め切りを過ぎたタスクがあります!!" + "\n" + "タスクの変更をしましょう!!");
 }
 
 // //完了処理
